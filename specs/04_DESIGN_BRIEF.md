@@ -2,7 +2,7 @@
 document: 04_DESIGN_BRIEF
 stage: 4
 status: APPROVED
-version: 1.2.0
+version: 1.3.0
 last_updated: 2026-10-24
 approved_by: human
 depends_on: [03_APP_FLOW]
@@ -13,6 +13,8 @@ depends_on: [03_APP_FLOW]
 Hoja implementable para el equipo. Identidad propia de Discoteca (no hereda EStiri).
 
 **Cambios**: 1.2.0 (2026-10-24): Josefin Slab en títulos, pedido del usuario el 2026-10-24.
+
+> v1.3.0 (2026-10-24): corregido según `REVIEW_05-06.md` (M10 glosario y landing; A6 y M7 en los pendientes de §10, que ya tienen compuerta).
 
 Artefactos de apoyo:
 
@@ -114,8 +116,8 @@ Dos familias, autoalojadas con Fontsource (npm) e importadas en `resources/css/a
 Josefin Slab tiene x-height baja y es más ancha que una condensada: por eso los títulos suben un paso respecto del texto (36/28 px) y los títulos de fila van a 18 px y no a 16.
 
 **Títulos largos**:
-- H1 y H2 (ficha, diálogo): se ajustan completos, nunca se truncan: `text-wrap: balance` y `overflow-wrap: anywhere` (solo parte una palabra que no cabe sola en la línea).
-- Título de fila en tablas: `min-inline-size: 10ch`, `max-inline-size: 26ch`, `overflow-wrap: break-word` y como máximo 2 líneas (`line-clamp: 2`). El texto completo sigue en el DOM: la búsqueda de DataTables y el lector de pantalla lo leen entero, y la ficha lo muestra completo.
+- H1 y H2 (detalle del artista, diálogo): se ajustan completos, nunca se truncan: `text-wrap: balance` y `overflow-wrap: anywhere` (solo parte una palabra que no cabe sola en la línea).
+- Título de fila en tablas: `min-inline-size: 10ch`, `max-inline-size: 26ch`, `overflow-wrap: break-word` y como máximo 2 líneas (`line-clamp: 2`). El texto completo sigue en el DOM: la búsqueda de DataTables y el lector de pantalla lo leen entero, y el detalle lo muestra completo.
 - Grilla de portadas (160 px): título en 2 líneas como máximo con la misma regla; el año va aparte en Atkinson.
 
 Reglas: títulos en redonda y en tipo oración (sin itálica, sin mayúsculas sostenidas). Párrafos a `max-width: 65ch`. `tabular-nums` en tablas, conteos, años y paginación. Inputs a 16 px como mínimo. Puntos suspensivos reales (`Guardando…`).
@@ -125,8 +127,8 @@ Reglas: títulos en redonda y en tipo oración (sin itálica, sin mayúsculas so
 - **Espaciado** (base de Tailwind, 4 px): dentro de un componente 4/8/12/16 px; entre bloques 24/32 px; ritmo de página 40/64 px (un corte de 96 px en la landing antes de la lista de funciones). En móvil (< 56rem): 24/40 px y 16 px de margen lateral.
 - **Radios**: `--radius-sleeve` 2 px (fotos y portadas), `--radius-control` 4 px (botones, inputs, ítems del menú, paginación), `--radius-panel` 6 px (paneles, flash, diálogo). Avatares: círculo.
 - **Elevación**: por paso tonal (canvas → surface; hover a sunken). La única sombra es `--shadow-dialog`, en el diálogo modal, que no lleva borde.
-- **Imágenes**: fotos y portadas siempre 1:1 con `object-fit: cover`, `width` y `height` explícitos, `loading="lazy"` en listas. Tamaños: 40 px en tabla, 120 px en la vista previa del formulario, 240 px en la ficha, 160 px en la grilla de álbumes. Foto del usuario: círculo de 40 px (riel) y 96 px (perfil).
-- **La galleta** (componente `<x-galleta :name="..." />`): círculo amarillo con aro interior `accent-strong`, agujero de eje `vinyl` al centro y dos iniciales en mono `ink` en la mitad superior (inicial de las dos primeras palabras del nombre, en mayúscula). Se usa cuando falta la foto del usuario o del artista. Tamaño por clase: 40 px por defecto, `galleta--lg` 64 px (ficha sin foto). Siempre `aria-hidden="true"`: el nombre ya está escrito al lado.
+- **Imágenes**: fotos y portadas siempre 1:1 con `object-fit: cover`, `width` y `height` explícitos, `loading="lazy"` en listas. Tamaños: 40 px en tabla, 120 px en la vista previa del formulario, 240 px en el detalle del artista, 160 px en la grilla de álbumes. Foto del usuario: círculo de 40 px (riel) y 96 px (perfil).
+- **La galleta** (componente `<x-galleta :name="..." />`): círculo amarillo con aro interior `accent-strong`, agujero de eje `vinyl` al centro y dos iniciales en mono `ink` en la mitad superior (inicial de las dos primeras palabras del nombre, en mayúscula). Se usa cuando falta la foto del usuario o del artista. Tamaño por clase: 40 px por defecto, `galleta--lg` 64 px (detalle sin foto). Siempre `aria-hidden="true"`: el nombre ya está escrito al lado.
 
 ## 5. Motion
 
@@ -158,7 +160,7 @@ El resto (ítems del menú, paginación, acciones de texto, diálogo, token most
 
 Fondo canvas, sin riel. Cabecera con "Discoteca" en Josefin 600 y un solo enlace a la derecha ("Iniciar sesión", o "Ir al dashboard" con sesión).
 
-- **Landing**: alineada a la izquierda. H1 en display "Tu colección de discos, en orden.", un párrafo de dos líneas, CTA primario "Crear cuenta" y enlace "Ya tengo cuenta". Tras el corte de 96 px, "Qué guarda Discoteca": lista de definiciones de 4 filas separadas por reglas (artistas con foto, álbumes con portada, año y género, gráfico por género, PDF por artista). Si se quiere una captura, va la real de la app terminada. Pie de una línea con el enlace al repo y `{{ now()->year }}`.
+- **Landing**: alineada a la izquierda. H1 en display "Tus artistas y álbumes, en orden.", un párrafo de dos líneas, CTA primario "Crear cuenta" y enlace "Ya tengo cuenta". Tras el corte de 96 px, "Qué guarda Discoteca": lista de definiciones de 4 filas separadas por reglas (artistas con foto, álbumes con portada, año y género, gráfico por género, PDF por artista). Si se quiere una captura, va la real de la app terminada. Pie de una línea con el enlace al repo y `{{ now()->year }}`.
 - **Login, registro, olvidé, reset**: columna de 26rem en un panel surface, campos con label visible, primario a todo el ancho y enlaces cruzados debajo. `autocomplete` correcto (`email`, `current-password`, `new-password`, `name`), `spellcheck="false"` en el correo, nunca bloquear el pegado. Mensajes de 03_APP_FLOW tal cual.
 - **Errores propios (403, 404, 413, 419, 500)**: el código en display ink-2, H1 con la frase, una línea de qué hacer y un botón secundario de vuelta (dashboard con sesión, landing sin ella). 403 "No tienes acceso a esto"; 404 "No encontramos esta página"; 413 "El archivo es demasiado grande" + "Sube una imagen de hasta 2 MB"; 419 "Tu sesión expiró" + "Vuelve a cargar la página y repite la acción"; 500 "Algo falló de nuestro lado". El resto de códigos usa las páginas de Laravel.
 
@@ -167,12 +169,12 @@ Fondo canvas, sin riel. Cabecera con "Discoteca" en Josefin 600 y un solo enlace
 Riel de 15.5rem (vinilo, `position: sticky`, alto `100svh`) y contenido de `max-width: 72rem`. Riel: "Discoteca", bloque del usuario (foto circular o galleta, nombre y correo), menú de 6 ítems y "Cerrar sesión" (formulario POST). El ítem actual lleva `aria-current="page"`, fondo vinyl-2 y una marca de 3 px en accent. Debajo de 56rem el riel pasa arriba (`grid-template-rows: auto 1fr`) y el menú corre en una fila con scroll propio. Cada página abre con H1, una línea en ink-2 y su CTA primario a la derecha.
 
 - **Dashboard**: "Hola, {nombre}" y dos bloques en fila, "Artistas" y "Álbumes", con el conteo real (Josefin 600, 36 px, cifras tabulares) y su enlace. Con 0 artistas, el estado vacío.
-- **Listas**: "Nuevo artista" o "Nuevo álbum" (primario) y la tabla DataTables (§8) en un panel. Columnas de 03_APP_FLOW; imagen de 40 px; nombre como enlace a la ficha; Editar y Eliminar como acciones de texto. Por debajo de 56rem se ocultan dos columnas y la tabla se desplaza en su contenedor. En álbumes sin artistas, el CTA del estado vacío lleva a crear un artista.
+- **Listas**: "Nuevo artista" o "Nuevo álbum" (primario) y la tabla DataTables (§8) en un panel. Columnas de 03_APP_FLOW; imagen de 40 px; nombre como enlace al detalle; Editar y Eliminar como acciones de texto. Por debajo de 56rem se ocultan dos columnas y la tabla se desplaza en su contenedor. En álbumes sin artistas, el CTA del estado vacío lleva a crear un artista.
 - **Formularios**: una columna de 40rem en un panel, campos a 24 px, "Guardar" (primario) y "Cancelar" (secundario). Año con `inputmode="numeric"` y ancho de 8ch. Archivo con `::file-selector-button` como secundario, el aviso "JPG, PNG o WebP, hasta 2 MB" y, en edición, la miniatura actual de 120 px.
-- **Ficha de artista**: foto de 240 px (o galleta `--lg` en un cuadro sunken de 240 px) y datos al lado (H1, "País · Género", biografía a 65ch). Acciones: "Agregar álbum" (primario), "Editar" y "Descargar PDF" (secundarios), "Eliminar" (acción de texto en danger). Debajo, grilla de portadas de 160 px con título y año. Sin álbumes: "Este artista todavía no tiene álbumes" + "Agregar álbum".
+- **Detalle del artista**: foto de 240 px (o galleta `--lg` en un cuadro sunken de 240 px) y datos al lado (H1, "País · Género", biografía a 65ch). Acciones: "Agregar álbum" (primario), "Editar" y "Descargar PDF" (secundarios), "Eliminar" (acción de texto en danger). Debajo, grilla de portadas de 160 px con título y año. Sin álbumes: "Este artista todavía no tiene álbumes" + "Agregar álbum".
 - **Borrado**: el botón Eliminar abre un `<dialog>` con `showModal()`: "Vas a eliminar a {X} y sus {N} álbumes. No se puede deshacer.", foco inicial en Cancelar (`autofocus`), Esc cierra. Sin JS, el formulario DELETE se envía directo (no hay página de confirmación).
 - **Estadísticas**: un solo panel, "Álbumes por género": barras horizontales en un contenedor de 20rem de alto y, debajo, la tabla de datos visible. Vacío: "Agrega álbumes para ver tus estadísticas" + CTA.
-- **API externa (GoRest)**: "Nuevo usuario" (primario). Arriba, el recuadro técnico: panel vinilo sin barra de título falsa, mono 13 px on-vinyl, método en accent (`GET`), la URL completa, las cabeceras enviadas una por línea (`Authorization: Bearer abcd…wxyz`, `Accept: application/json`) y el código de respuesta ("200 OK"). Debajo, tabla simple (sin DataTables) con nombre, correo, género, estado y acciones, que muestra solo los usuarios creados por la app (correo `@discoteca.test`). Errores con el flash de error y "Reintentar"; los 422 junto a cada campo; 403 al editar o borrar: "Ese usuario lo creó otra cuenta de GoRest"; vacío: "Todavía no creaste usuarios en GoRest" + "Crear uno".
+- **API externa (GoRest)**: "Nuevo usuario" (primario). Arriba, el recuadro técnico: panel vinilo sin barra de título falsa, mono 13 px on-vinyl, método en accent (`GET`), la URL completa, las cabeceras enviadas una por línea (`Authorization: Bearer abcd…wxyz`, `Accept: application/json`) y el código de respuesta ("200 OK"). Debajo, tabla simple (sin DataTables) con nombre, correo, género, estado y acciones, que muestra solo los usuarios creados por la app (correo `@discoteca.test`). Errores con el flash de error y "Reintentar"; los 422 junto a cada campo; 403 al editar o borrar: "Ese usuario lo creó otra cuenta de GoRest"; vacío: "Todavía no creaste usuarios externos" + "Crear uno".
 - **Perfil**: tres paneles con su H2: "Tus datos" (nombre, correo, foto con vista previa circular de 96 px), "Contraseña" y "Tokens de API" (nombre, fecha de creación y "Revocar"; formulario de una línea para crear uno). Cada bloque muestra solo sus errores. Token recién creado: panel accent-soft con el token en mono, `user-select: all`, botón "Copiar" (dice "Copiado" con `aria-live="polite"`) y el aviso "Cópialo ahora: no se podrá ver de nuevo."
 
 ## 8. DataTables 2
@@ -338,8 +340,8 @@ dompdf entiende CSS 2.1 (sin flex, grid, variables ni `oklch()`). La vista tiene
 ## 10. Verificación
 
 - Hecho: `contrast.mjs` (28 pares, 0 fallas) y el checker de deliberate en `--strict` sobre el prototipo (0 hallazgos). Las capturas del prototipo a 1280, 375 y 320 px se tomaron durante el diseño pero no quedaron registradas en el repo: no cuentan como evidencia.
-- **Pendiente para el GATES**: prueba con DataTables 2.3.8 real y 25 filas del seeder (búsqueda, `select` de filas, flechas de orden, paginación), capturas guardadas a 1280 y 375 px, y el `<dialog>` abierto y cerrado solo con teclado (Tab, Enter, Esc). Si el CSS propio no aguanta, se aplica el plan B de §8.
-- Pendiente para el GATES: un PDF con una portada WebP (dompdf necesita GD con soporte WebP).
+- **En el GATES (F14)**: prueba con DataTables 2.3.8 real sobre los 12 álbumes del seeder (2 páginas de 10) (búsqueda, `select` de filas, flechas de orden, paginación), capturas guardadas a 1280 y 375 px, y el `<dialog>` abierto y cerrado solo con teclado (Tab, Enter, Esc). Si el CSS propio no aguanta, se aplica el plan B de §8.
+- En el GATES (F8): un PDF con una portada WebP de 2000 px (dompdf necesita GD con soporte WebP).
 
 ## 11. Supuestos a validar
 

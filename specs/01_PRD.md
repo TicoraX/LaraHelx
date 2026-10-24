@@ -2,7 +2,7 @@
 document: 01_PRD
 stage: 1
 status: APPROVED
-version: 1.1.0
+version: 1.2.0
 last_updated: 2026-10-24
 approved_by: human
 depends_on: [00_REALITY_CHECK]
@@ -11,6 +11,8 @@ depends_on: [00_REALITY_CHECK]
 # 01. Product Requirements Document (PRD)
 
 > v1.1.0 (2026-10-23): corregido según `REVIEW_00-04.md` (B1, A1, A4, M1, L2, L7 y recortes).
+>
+> v1.2.0 (2026-10-24): corregido según `REVIEW_05-06.md` (A5, M10, B7).
 
 Nombre de trabajo: **Discoteca** (catálogo de artistas y álbumes). El nombre es provisional; lo cambia el equipo.
 
@@ -43,7 +45,7 @@ Historias con criterios Gherkin. El código entre corchetes es el id con el que 
 - Tras 5 intentos fallidos en un minuto, el login se bloquea temporalmente.
 
 **[H4] Olvidé mi contraseña**
-- Dado un correo registrado, cuando pido restablecer, entonces recibo un correo con un enlace que lleva un token de un solo uso (guardado con hash en `password_reset_tokens`) y vence a los 60 minutos.
+- Dado un correo registrado, cuando pido restablecer, entonces recibo un correo con un enlace que lleva un token de un solo uso (guardado con hash en `password_reset_tokens`) y vence a los 15 minutos.
 - Cuando abro el enlace y pongo una contraseña nueva, entonces puedo iniciar sesión con ella y la vieja deja de servir.
 - Dado un correo no registrado, la pantalla responde igual que con uno registrado (no revela qué correos existen). Esto no es el comportamiento por defecto de Fortify: requiere una respuesta propia (02_TRD §3).
 - Tras 6 pedidos en un minuto desde la misma IP, el formulario se bloquea temporalmente.
@@ -59,7 +61,7 @@ Historias con criterios Gherkin. El código entre corchetes es el id con el que 
 
 **[H7] CRUD de Artistas (tabla 1)**
 - *Como* usuario, *quiero* crear, ver, editar y borrar artistas con nombre, país, género principal, biografía corta y foto, *para* armar mi catálogo.
-- Cuando creo un artista con una foto JPG, PNG o WebP de hasta 2 MB, entonces la foto se guarda y se ve en el listado y en la ficha.
+- Cuando creo un artista con una foto JPG, PNG o WebP de hasta 2 MB, entonces la foto se guarda y se ve en el listado y en el detalle del artista.
 - Cuando subo un archivo que no es imagen o pesa más de 2 MB, entonces veo el error y no se guarda nada.
 - Cuando borro un artista que tiene álbumes, entonces se me pide confirmar y se borran también sus álbumes y sus imágenes.
 
@@ -79,8 +81,8 @@ Historias con criterios Gherkin. El código entre corchetes es el id con el que 
 - La vista "Estadísticas" muestra un gráfico (Chart.js) de mis álbumes por género, calculado de mis datos, con su tabla de datos debajo.
 - Con cero álbumes, se muestra un estado vacío honesto en lugar de un gráfico vacío o inventado.
 
-**[H12] Informe PDF**
-- Desde la ficha de un artista, "Descargar PDF" genera un PDF con los datos del artista, su foto y la lista de sus álbumes.
+**[H12] Ficha PDF** (el "informe PDF" de la rúbrica)
+- Desde el detalle de un artista, "Descargar PDF" genera su ficha: un PDF con los datos del artista, su foto y la lista de sus álbumes.
 
 **[H13] API propia para apps externas**
 - Una app externa obtiene un token con `POST /api/v1/tokens` (correo y contraseña) y con `Authorization: Bearer <token>` puede listar, ver, crear, actualizar y borrar los artistas del dueño del token (`GET`, `POST`, `PUT`, `DELETE` sobre `/api/v1/artists`).
@@ -88,7 +90,7 @@ Historias con criterios Gherkin. El código entre corchetes es el id con el que 
 - El usuario puede crear (el valor se muestra una sola vez), ver y revocar sus tokens desde "Mi perfil".
 
 **[H14] Consumo de un servicio REST externo con token**
-- La opción "API externa" muestra los usuarios de GoRest creados desde la app (`GET` filtrado por el dominio de correo `@discoteca.test`), permite crear (`POST`, siempre con correo `@discoteca.test`), editar (`PUT`) y borrar (`DELETE`) uno de ellos, enviando `Authorization: Bearer` y `Accept: application/json` desde el servidor.
+- La opción "API externa" muestra los usuarios externos (registros de GoRest) creados desde la app (`GET` filtrado por el dominio de correo `@discoteca.test`), permite crear (`POST`, siempre con correo `@discoteca.test`), editar (`PUT`) y borrar (`DELETE`) uno de ellos, enviando `Authorization: Bearer` y `Accept: application/json` desde el servidor.
 - GoRest solo deja modificar filas creadas con el mismo token: si responde 403, la pantalla dice "Ese usuario lo creó otra cuenta de GoRest; solo puedes editar los que creaste aquí".
 - El token de GoRest vive en `.env` del servidor y nunca llega al navegador.
 - Si GoRest no responde a tiempo o devuelve un error, la pantalla muestra el error real y un botón "Reintentar"; no se inventan datos.
@@ -119,7 +121,31 @@ Historias con criterios Gherkin. El código entre corchetes es el id con el que 
 
 ## 4. Métricas de Éxito
 
-- **Métrica principal**: los 17 ítems de la rúbrica se demuestran en vivo sobre `https://laravel.helx.page` en menos de 12 minutos, siguiendo un guion de sustentación escrito (`docs/GUION.md`, responsable: integrante C, ver §6).
+- **Métrica principal**: los ítems de la rúbrica (lista de abajo) se demuestran en vivo sobre `https://laravel.helx.page` en menos de 12 minutos, siguiendo un guion de sustentación escrito (`docs/GUION.md`, responsable: integrante C, ver §6).
+- **Ítems de la rúbrica** (los mismos de `REVIEW_00-04.md` §3; el guion los recorre en este orden o dice dónde salta):
+  1. Laravel 12.
+  2. Equipo de 3.
+  3. Vistas que heredan de una maestra.
+  4. Base de datos PostgreSQL.
+  5. Landing page.
+  6. Formulario propio de registro y login.
+  7. Rutas protegidas.
+  8. Base de datos creada por migraciones.
+  9. Modelos y controladores coherentes.
+  10. Restaurar contraseña.
+  11. Dashboard con el usuario activo.
+  12. Menú con logout correcto.
+  13. DataTables en dos tablas.
+  14. Editar perfil.
+  15. Al menos un chart.
+  16. CRUD de al menos dos tablas.
+  17. Ruta API consumible desde fuera.
+  18. Informe PDF.
+  19. Subir imágenes.
+  20. Consumir un servicio REST con GET, POST, PUT y DELETE.
+  21. Tokens, cabeceras y autorización.
+  22. Publicado en internet.
+  23. Copia en GitHub.
 - **Criterio de aceptación**:
   - `php artisan test` en verde, con al menos un test de feature por historia H2 a H14.
   - Cada historia tiene su compuerta en `06_GATES.md` con `CHECK:` y `EXPECT:` y evidencia registrada.

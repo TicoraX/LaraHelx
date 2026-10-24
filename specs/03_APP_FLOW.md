@@ -2,7 +2,7 @@
 document: 03_APP_FLOW
 stage: 3
 status: APPROVED
-version: 1.1.0
+version: 1.2.0
 last_updated: 2026-10-24
 approved_by: human
 depends_on: [01_PRD, 02_TRD]
@@ -11,6 +11,8 @@ depends_on: [01_PRD, 02_TRD]
 # 03. App Flow y Estados de Pantalla
 
 > v1.1.0 (2026-10-23): corregido según `REVIEW_00-04.md` (B1, A1, M1, M7, L2, L3, L6 y recortes).
+>
+> v1.2.0 (2026-10-24): corregido según `REVIEW_05-06.md` (A2, A3, A5, M2, M10, M13, B3, B9).
 
 App renderizada en el servidor (Blade). Casi todos los estados salen de una petición HTTP completa: el "loading" es el envío del formulario y el "success" es la redirección con un mensaje flash. Solo DataTables, Chart.js y el cuadro de confirmación de borrado usan JS, Sin JS no se rompe nada esencial (la tabla queda como tabla HTML y el formulario de borrado se envía directo), pero no se construye ninguna ruta ni vista extra para ese caso.
 
@@ -36,17 +38,17 @@ flowchart TD
 
 | Ruta | Método | Propósito | Guarda |
 | :--- | :--- | :--- | :--- |
-| `/` | GET | Landing | Pública. Con sesión iniciada, el CTA cambia a "Ir al dashboard". |
+| `/` | GET | Landing (`Route::view`, sin closure, por `route:cache`) | Pública. Con sesión iniciada, el CTA cambia a "Ir al dashboard". |
 | `/register` | GET, POST | Registro (Fortify) | `guest` |
 | `/login` | GET, POST | Login (Fortify) | `guest`, `throttle:login` (5/min por correo e IP) |
-| `/forgot-password` | GET, POST | Pedir enlace de reset | `guest`; el POST con `throttle:6,1` (agregado: Fortify no lo trae) y respuesta idéntica exista o no el correo |
-| `/reset-password/{token}` | GET | Formulario de contraseña nueva | `guest`, token de un solo uso (guardado con hash) que vence a los 60 min |
+| `/forgot-password` | GET, POST | Pedir enlace de reset | `guest`; el POST con `throttle:6,1` agregado solo a la ruta `password.email` (Fortify no lo trae; mecanismo en 02 §3) y respuesta idéntica exista o no el correo |
+| `/reset-password/{token}` | GET | Formulario de contraseña nueva | `guest`, token de un solo uso (guardado con hash) que vence a los 15 min |
 | `/reset-password` | POST | Guardar contraseña nueva | `guest` |
 | `/logout` | POST | Cerrar sesión e invalidarla | `auth` |
 | `/dashboard` | GET | Inicio: usuario activo, menú y conteos | `auth` |
-| `/artists` | resource (7 rutas) | CRUD de artistas | `auth` + `ArtistPolicy` |
-| `/albums` | resource (7 rutas) | CRUD de álbumes | `auth` + `AlbumPolicy` |
-| `/reports/artists/{artist}` | GET | PDF de un artista | `auth` + `ArtistPolicy@view` |
+| `/artists` | resource (7 rutas, parámetro `{artist}`) | CRUD de artistas | `auth` + binding con alcance de usuario + `ArtistPolicy` |
+| `/albums` | resource (7 rutas, parámetro `{album}`) | CRUD de álbumes | `auth` + binding con alcance de usuario + `AlbumPolicy` |
+| `/reports/artists/{artist}` | GET | Ficha PDF de un artista (la ruta usa `reports` por convención técnica) | `auth` + binding con alcance de usuario + `ArtistPolicy@view` |
 | `/stats` | GET | Gráficos | `auth` |
 | `/external/users` | GET, POST | Listar y crear en GoRest | `auth` |
 | `/external/users/create` | GET | Formulario de alta | `auth` |
@@ -66,11 +68,11 @@ flowchart TD
 | `/tokens` | POST `{email, password, device_name}` | 201 `{token}` | `throttle:5,1`. Credenciales malas: 422 con mensaje genérico. |
 | `/artists` | GET | 200 lista paginada (15 por página) | `auth:sanctum`, `throttle:60,1` (por usuario) |
 | `/artists` | POST | 201 + `Location` | `auth:sanctum` |
-| `/artists/{id}` | GET | 200 | `auth:sanctum` + Policy |
-| `/artists/{id}` | PUT | 200 | `auth:sanctum` + Policy |
-| `/artists/{id}` | DELETE | 204 | `auth:sanctum` + Policy |
+| `/artists/{artist}` | GET | 200 | `auth:sanctum` + binding con alcance de usuario + Policy |
+| `/artists/{artist}` | PUT | 200 | `auth:sanctum` + binding con alcance de usuario + Policy |
+| `/artists/{artist}` | DELETE | 204 | `auth:sanctum` + binding con alcance de usuario + Policy |
 
-Errores de la API: 401 sin token o con token inválido, 404 para un artista que no existe o que es de otro usuario (la Policy responde `denyAsNotFound()`: no se revela que existe; lo mismo en las rutas web), 422 con `errors` por campo, 429 con `Retry-After`. Nunca HTML ni redirección al login (`Accept: application/json` forzado en el grupo).
+Errores de la API: 401 sin token o con token inválido o vencido, 404 para un artista que no existe o que es de otro usuario, 422 con `errors` por campo, 429 con `Retry-After`. El ajeno y el inexistente devuelven el mismo cuerpo (`{"message": "No encontrado"}`): el `Route::bind` resuelve `{artist}` desde los artistas del usuario antes de validar, así que un `PUT` ajeno con datos inválidos también da 404 y no 422 (05 §2, I2; lo mismo en las rutas web). Nunca HTML ni redirección al login, aunque la petición no mande `Accept: application/json`: `bootstrap/app.php` fuerza JSON en `api/*` (02 §6).
 
 ## 2. Estados por Pantalla
 
@@ -113,14 +115,14 @@ Convenciones para todas las vistas:
 2. **Loading**: botón deshabilitado al enviar (la subida puede tardar).
 3. **Empty**: en álbumes sin artistas, el formulario no se muestra; va el CTA hacia crear un artista.
 4. **Error**: validación por campo; imagen inválida o pesada con el error junto al campo; un `artist_id` ajeno da error de validación ("El artista seleccionado no es válido").
-5. **Success**: redirección a la ficha (`show`) con flash.
+5. **Success**: redirección a la vista de detalle (`show`) con flash.
 
-### Ficha de artista `/artists/{artist}`
+### Detalle del artista `/artists/{artist}`
 1. **Idle**: foto, datos, lista de álbumes y los botones Editar, Eliminar y "Descargar PDF".
 2. **Loading**: la descarga del PDF es una navegación normal; el navegador muestra el progreso.
 3. **Empty**: sin álbumes, "Este artista todavía no tiene álbumes" y el CTA "Agregar álbum" con el artista preseleccionado.
 4. **Error**: artista ajeno o inexistente da 404 propio.
-5. **Success**: el PDF se descarga como `artista-<slug>.pdf`.
+5. **Success**: la ficha PDF se descarga como `artista-<slug>.pdf`.
 
 ### Confirmación de borrado
 1. **Idle**: un `<dialog>` nativo con "Vas a eliminar a X y sus N álbumes. No se puede deshacer." y los botones Cancelar (con el foco inicial) y Eliminar. Sin JS, el formulario DELETE se envía directo.
@@ -137,9 +139,9 @@ Convenciones para todas las vistas:
 5. **Success**: no aplica (vista de lectura).
 
 ### API externa `/external/users` (GoRest)
-1. **Idle**: los usuarios de GoRest creados desde la app, es decir con correo `@discoteca.test` (`GET /public/v2/users?email=discoteca.test`), con nombre, correo, género y estado, los botones Editar y Eliminar, y "Nuevo usuario". GoRest solo deja modificar filas creadas con el mismo token, por eso no se listan las ajenas. Un recuadro técnico muestra el método, la URL y las cabeceras de la última llamada, con el token enmascarado (`Bearer abcd…wxyz`), para explicarlo en la sustentación.
+1. **Idle**: los usuarios externos creados desde la app, es decir con correo `@discoteca.test` (`GET /public/v2/users?email=discoteca.test&per_page=100`; sin `per_page` GoRest devuelve 10 y, tras muchas demos, los más viejos quedan fuera), con nombre, correo, género y estado, los botones Editar y Eliminar, y "Nuevo usuario". GoRest solo deja modificar filas creadas con el mismo token, por eso no se listan las ajenas. Un recuadro técnico muestra el método, la URL y las cabeceras de la última llamada, con el token enmascarado (`Bearer abcd…wxyz`), para explicarlo en la sustentación.
 2. **Loading**: la página espera la respuesta de GoRest en el servidor (3 s de conexión y 6 s de respuesta por intento); los formularios deshabilitan el botón al enviar.
-3. **Empty**: si no hay usuarios `@discoteca.test` (GoRest resiembra sus datos a diario), "Todavía no creaste usuarios en GoRest" y el CTA "Crear uno".
+3. **Empty**: si no hay usuarios `@discoteca.test` (GoRest resiembra sus datos a diario), "Todavía no creaste usuarios externos" y el CTA "Crear uno".
 4. **Error**:
    - Timeout o error de conexión: "No pudimos contactar a GoRest (motivo)" y botón "Reintentar".
    - 401: "El token de GoRest no es válido o no está configurado". Se decide por el código de estado, no por el texto (GoRest responde "Authentication failed" sin token e "Invalid token" con uno inválido).
@@ -173,14 +175,14 @@ stateDiagram-v2
 ## 4. Casos de Borde y Recuperación
 
 - **Sesión vencida o token CSRF viejo (419)**: página propia "Tu sesión expiró. Vuelve a cargar la página y repite la acción" con enlace al login. No se pierde nada guardado, porque la mutación no se ejecutó.
-- **Atrás después de logout**: las páginas autenticadas responden `Cache-Control: no-store`, así que el navegador no muestra el dashboard desde su caché.
+- **Atrás después de logout**: las páginas autenticadas responden `Cache-Control: no-store` (middleware `cache.headers:no_store;private` en el grupo `auth`, 02 §6), así que el navegador no muestra el dashboard desde su caché.
 - **Doble envío**: el botón se deshabilita; además, crear un registro redirige (POST-redirect-GET), de modo que recargar no lo duplica.
 - **Borrar con archivos**: los archivos se borran después del commit. Si el commit falla, los archivos siguen ahí y la fila también.
 - **Imagen huérfana al editar**: la imagen vieja se borra solo si la nueva quedó guardada y la fila confirmada.
 - **GoRest responde algo inesperado** (sin `id`, campos faltantes): el cliente valida la forma de la respuesta y la trata como error ("Respuesta inesperada de GoRest"), no la pinta a medias.
 - **Correo cambiado en el perfil**: la sesión sigue activa y el próximo reset de contraseña va al correo nuevo. No se reenvía verificación (fuera de alcance).
 - **Token de API revocado mientras una app externa lo usa**: la siguiente petición recibe 401 de inmediato (Sanctum lo busca en la BD en cada petición).
-- **Usuario borrado manualmente en la BD**: sus artistas, álbumes y tokens caen en cascada.
+- **Usuario borrado manualmente en la BD**: sus artistas y álbumes caen en cascada; sus tokens y sesiones quedan huérfanos y no autentican (05 §2, I5). La app no ofrece borrar cuentas.
 
 ## 5. Supuestos a Validar
 

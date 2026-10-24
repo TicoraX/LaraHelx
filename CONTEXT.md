@@ -33,8 +33,12 @@ Imagen de un álbum.
 _Evitar_: carátula, cover
 
 **Ficha**:
-Documento PDF de un artista con sus datos, su foto y la lista de sus álbumes.
-_Evitar_: reporte, informe (la rúbrica dice "informe"; en el producto es la ficha)
+Documento PDF de un artista con sus datos, su foto y la lista de sus álbumes. Solo el PDF: la pantalla del artista es el detalle.
+_Evitar_: reporte, informe (la rúbrica dice "informe"; en el producto es la ficha). Excepción: la ruta `/reports/artists/{artist}` usa `reports` por convención técnica.
+
+**Detalle del artista**:
+Pantalla `/artists/{artist}` con la foto, los datos y los álbumes de un artista, desde donde se descarga su ficha.
+_Evitar_: ficha (es el PDF), perfil del artista
 
 ## Acceso e integración
 
