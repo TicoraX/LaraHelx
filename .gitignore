@@ -1,0 +1,13 @@
+# Local de cada máquina
+CLAUDE.local.md
+.unlazy/
+.claude/settings.local.json
+
+# Secretos (el esqueleto de Laravel trae su propio .gitignore: fusionarlo al crearlo)
+.env
+.env.*
+!.env.example
+
+# Dependencias
+/vendor
+/node_modules
