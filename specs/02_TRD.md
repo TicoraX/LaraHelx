@@ -90,7 +90,7 @@ flowchart LR
   - `chown -R 1001:1001 storage bootstrap/cache` antes de declarar los volúmenes, para que el usuario 1001 pueda escribir.
   - `ENV SERVER_NAME=:8000`.
   - Entrypoint: `mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions` y después `php artisan optimize`. El `tmpfs` se monta vacío encima de `storage/framework`: sin esas carpetas, `realpath` de `framework/views` da `false`, el compilador de Blade lanza "Please provide a valid cache path" y ninguna vista renderiza.
-  - `route:cache` (dentro de `optimize`) falla si alguna ruta es un closure: la landing usa `Route::view('/', 'landing')`.
+  - `route:cache` (dentro de `optimize`) serializa closures desde Laravel 9 (`SerializableClosure`; verificado el 2026-10-24 con `/up` y `storage/{path}`, que son closures del framework). Aun así, las rutas propias van a un controlador o a `Route::view` (la landing es `Route::view('/', 'landing')`), por convención.
 - **compose.yml**: dos servicios, `app` (`container_name: laravel-app`) y `db` (`container_name: laravel-db`; P9 y el respaldo usan ese nombre), con la plantilla de endurecimiento de la VPS adaptada a lo que Laravel necesita escribir:
   - `app`: `user: "1001:1001"`, `read_only: true`, `cap_drop: [ALL]`, `security_opt: [no-new-privileges:true]`, `mem_limit: 512m`. Publica `127.0.0.1:8000:8000`.
     - Volumen `laravel-storage` en `/app/storage/app/public` (imágenes).
@@ -152,7 +152,7 @@ Lo que el esqueleto trae por defecto y hay que cambiar. Cada línea termina con 
   ```
   `shouldRenderJsonWhen` gobierna también el 401 y el 422. **Gate F9** (peticiones sin `Accept`).
 - Grupo `auth` de rutas web con el middleware `cache.headers:no_store;private`, para que Atrás después del logout no muestre el dashboard. **Gate F18**.
-- Ninguna ruta es un closure (`route:cache` falla con closures): la landing es `Route::view`. **Gates S10 y S4**.
+- Ninguna ruta propia es un closure (convención: controlador o `Route::view`; `route:cache` sí acepta closures, y `/up` y `storage/{path}` lo son): la landing es `Route::view`. **Gate S10**.
 - Idioma: `APP_LOCALE=es`, `APP_FALLBACK_LOCALE=es`, `php artisan lang:publish`, los archivos `lang/es/{validation,auth,passwords,pagination}.php` y `lang/es.json` con las cadenas JSON que usan el correo de reset (`Reset Password Notification`, `You are receiving this email because...` y las demás de `ResetPassword`), el stub `UpdateUserPassword` (`The provided password does not match your current password.`) y `Unauthenticated.`; con `laravel-lang/common` como dependencia de desarrollo o a mano. **Gate F11**.
 - `phpunit.xml`: `DB_CONNECTION=pgsql`, `DB_DATABASE=laravel_test` (el esqueleto trae SQLite en memoria, y el PHP de Windows no tiene `pdo_sqlite`). `SESSION_DRIVER=array` queda como viene: F20 prueba la acción que borra sesiones y P6 lo comprueba con dos navegadores. **Gate S2**.
 - `.env.example`: `DB_CONNECTION=pgsql` con los valores del contenedor local, `QUEUE_CONNECTION=sync`, `SESSION_DRIVER=database`, `GOREST_TOKEN=` vacío, `SEED_DEMO_PASSWORD=` con un valor de desarrollo, `MAIL_MAILER=log`, `MAIL_FROM_ADDRESS="no-reply@helx.page"` y `MAIL_FROM_NAME="Discoteca"`. **Gate S10**.

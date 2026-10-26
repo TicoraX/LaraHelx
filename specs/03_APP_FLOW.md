@@ -38,7 +38,7 @@ flowchart TD
 
 | Ruta | Método | Propósito | Guarda |
 | :--- | :--- | :--- | :--- |
-| `/` | GET | Landing (`Route::view`, sin closure, por `route:cache`) | Pública. Con sesión iniciada, el CTA cambia a "Ir al dashboard". |
+| `/` | GET | Landing (`Route::view`, sin closure, por convención) | Pública. Con sesión iniciada, el CTA cambia a "Ir al dashboard". |
 | `/register` | GET, POST | Registro (Fortify) | `guest` |
 | `/login` | GET, POST | Login (Fortify) | `guest`, `throttle:login` (5/min por correo e IP) |
 | `/forgot-password` | GET, POST | Pedir enlace de reset | `guest`; el POST con `throttle:6,1` agregado solo a la ruta `password.email` (Fortify no lo trae; mecanismo en 02 §3) y respuesta idéntica exista o no el correo |

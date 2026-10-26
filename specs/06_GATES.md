@@ -94,7 +94,7 @@ Orden: un test rojo, el código mínimo para ponerlo verde, el siguiente test. N
   EXPECT: /^\s*\d+\s+\S.*\r?\n\s*\d+\s+\S.*\r?\n\s*\d+\s+\S/m
   EVIDENCE: pending
 
-- [ ] S10: la configuración obligatoria de 02 §6 está aplicada (4 tests: no existen rutas de 2FA ni de passkeys; el disco public lanza excepción al fallar una escritura; .env.example declara pgsql, sync, database, GOREST_TOKEN, SEED_DEMO_PASSWORD y MAIL_FROM_ADDRESS; ninguna ruta es un closure) (responsable C)
+- [ ] S10: la configuración obligatoria de 02 §6 está aplicada (4 tests: no existen rutas de 2FA ni de passkeys; el disco public lanza excepción al fallar una escritura; .env.example declara pgsql, sync, database, GOREST_TOKEN, SEED_DEMO_PASSWORD y MAIL_FROM_ADDRESS; ninguna ruta propia es un closure, sin contar /up ni storage/{path} del framework) (responsable C)
   CHECK: php artisan test tests/Feature/ConfigTest.php
   EXPECT: /Tests:\s+(?:[4-9]|[1-9]\d+) passed/
   EVIDENCE: pending
@@ -102,7 +102,7 @@ Orden: un test rojo, el código mínimo para ponerlo verde, el siguiente test. N
 ### Qué verifica `scripts/gates/smoke.mjs` (S4)
 
 Script de Node sin dependencias, que recibe la URL base y sale con código distinto de 0 ante cualquier falla, imprimiendo cuál. Imprime `smoke passed` solo si todo cumple:
-- `GET /up` y `GET /login` responden 200 por HTTPS (un 500 en `/login` delata el `tmpfs` de vistas o una ruta closure en `route:cache`).
+- `GET /up` y `GET /login` responden 200 por HTTPS (un 500 en `/login` delata el `tmpfs` de vistas sin sus carpetas).
 - En `/login`, las cinco cabeceras de 05 §5 con sus valores exactos: `Content-Security-Policy` con `default-src 'self'`, `script-src 'self'`, `img-src 'self' data:` y `frame-ancestors 'none'`; `X-Content-Type-Options: nosniff`; `X-Frame-Options: DENY`; `Referrer-Policy: strict-origin-when-cross-origin`; `Strict-Transport-Security: max-age=31536000`.
 - Cada `Set-Cookie` de `/login` (sesión y `XSRF-TOKEN`) lleva `Secure` y `SameSite=Lax`, y la de sesión además `HttpOnly`.
 - `GET /api/v1/artists` sin token y sin `Accept` responde 401 con cuerpo JSON (A2 detrás de Caddy).
