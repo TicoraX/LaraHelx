@@ -11,9 +11,9 @@ Catálogo personal de artistas y álbumes. Equipo de 3, sustentación de 15 minu
 | Rutas, guardas y los 5 estados de cada pantalla | `specs/03_APP_FLOW.md` |
 | Tokens visuales, tipografía, DataTables, Chart.js, PDF | `specs/04_DESIGN_BRIEF.md` y `specs/design/prototype.html` |
 | Tablas, invariantes I1-I9, validación, contratos de la API | `specs/05_BACKEND_SCHEMA.md` |
-| Qué significa "terminado" (33 compuertas con `CHECK:`/`EXPECT:`) | `specs/06_GATES.md` |
+| Qué significa "terminado" (44 compuertas con `CHECK:`/`EXPECT:`) | `specs/06_GATES.md` |
 | Vocabulario del dominio (Artista, Álbum, Usuario externo...) | `CONTEXT.md` |
-| Revisiones duras y lo que se corrigió | `specs/REVIEW_*.md` |
+| Por qué cambió un spec | La nota de versión al inicio de cada spec y `git log -- specs/` |
 
 ## Reglas
 
@@ -24,7 +24,7 @@ Catálogo personal de artistas y álbumes. Equipo de 3, sustentación de 15 minu
 - Lo ajeno responde 404 (`Response::denyAsNotFound()`), en web y en API.
 - Blade siempre con `{{ }}`; prohibido `{!! !!}` con datos del usuario. Sin atributos `style=""` ni scripts inline (CSP `script-src 'self'`).
 - UI solo en español (`lang/es`). Sin emojis en código, commits ni textos.
-- Commits pequeños, uno por cambio lógico, con `php artisan test` en verde. Si una decisión de un spec cambia, el spec se actualiza en el mismo commit.
+- Commits pequeños, uno por cambio lógico, con `php artisan test` en verde y sin líneas `Co-Authored-By` ni otra atribución a agentes de IA. Si una decisión de un spec cambia, el spec se actualiza en el mismo commit.
 - Si algo falla dos veces seguidas, parar y replantear antes de un tercer intento.
 
 ## Comandos

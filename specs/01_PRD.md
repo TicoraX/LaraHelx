@@ -122,7 +122,7 @@ Historias con criterios Gherkin. El código entre corchetes es el id con el que 
 ## 4. Métricas de Éxito
 
 - **Métrica principal**: los ítems de la rúbrica (lista de abajo) se demuestran en vivo sobre `https://laravel.helx.page` en menos de 12 minutos, siguiendo un guion de sustentación escrito (`docs/GUION.md`, responsable: integrante C, ver §6).
-- **Ítems de la rúbrica** (los mismos de `REVIEW_00-04.md` §3; el guion los recorre en este orden o dice dónde salta):
+- **Ítems de la rúbrica** (el guion los recorre en este orden o dice dónde salta):
   1. Laravel 12.
   2. Equipo de 3.
   3. Vistas que heredan de una maestra.
