@@ -16,6 +16,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "chart.js": "^4.6.1",
         "datatables.net-dt": "^2.3.8"
     }
 }
