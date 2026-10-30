@@ -62,11 +62,7 @@ class ArtistController extends Controller
     public function destroy(Artist $artist): RedirectResponse
     {
         Gate::authorize('delete', $artist);
-        // I4: las rutas se juntan antes; el DELETE con su cascada es atómico y los archivos
-        // se borran solo si la fila ya no está. Si el DELETE falla, archivos y fila siguen ahí.
-        $paths = $artist->albums()->pluck('cover_path')->push($artist->photo_path)->filter()->all();
-        $artist->delete();
-        Images::delete($paths);
+        $artist->deleteWithImages();
 
         return redirect()->route('artists.index')->with('status', 'Artista eliminado');
     }
