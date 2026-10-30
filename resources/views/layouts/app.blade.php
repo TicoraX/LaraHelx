@@ -25,6 +25,7 @@
             <nav class="nav">
                 <a href="{{ route('dashboard') }}" @if (request()->routeIs('dashboard')) aria-current="page" @endif>Inicio</a>
                 <a href="{{ route('artists.index') }}" @if (request()->routeIs('artists.*')) aria-current="page" @endif>Artistas</a>
+                <a href="{{ route('albums.index') }}" @if (request()->routeIs('albums.*')) aria-current="page" @endif>Álbumes</a>
             </nav>
 
             <form class="rail__foot" method="POST" action="{{ route('logout') }}">

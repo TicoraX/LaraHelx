@@ -159,14 +159,16 @@
   .sleeve--xs { inline-size: 40px; block-size: 40px; }
   .sleeve--empty { display: grid; place-items: center; background: var(--color-sunken); }
 
-  /* ---------- detalle del artista ---------- */
-  .artist { display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; align-items: start; }
-  .artist__data { display: grid; gap: 0.75rem; flex: 1 1 20rem; }
-  .artist__data h1 { margin: 0; }
-  .artist__data p { margin: 0; }
-  .artist__meta { color: var(--color-ink-2); }
+  /* ---------- detalle de artista y de álbum ---------- */
+  .detail { display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; align-items: start; }
+  .detail__data { display: grid; gap: 0.75rem; flex: 1 1 20rem; }
+  .detail__data h1 { margin: 0; }
+  .detail__data p { margin: 0; }
+  .detail__meta { color: var(--color-ink-2); }
   .covers { display: grid; grid-template-columns: repeat(auto-fill, 160px); gap: 1.5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
   .covers li { display: grid; gap: 0.25rem; }
+  .covers__link { display: grid; gap: 0.25rem; text-decoration: none; border-radius: var(--radius-sleeve); }
+  @media (hover: hover) { .covers__link:hover .covers__title { text-decoration: underline; } }
   .covers__title {
     font-family: var(--font-display); font-weight: 700; line-height: 1.2; overflow-wrap: break-word;
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
@@ -248,6 +250,7 @@
     transition: background-color var(--dur-state) var(--ease-out);
   }
   .input:focus-visible { outline-offset: 1px; }
+  .input--year { inline-size: 8ch; min-inline-size: 6rem; }
   textarea.input { min-height: 7rem; padding-block: 0.5rem; resize: vertical; }
   .input[type="file"] { padding: 0.375rem; }
   .input::file-selector-button {

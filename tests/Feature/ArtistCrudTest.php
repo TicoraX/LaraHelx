@@ -42,12 +42,24 @@ class ArtistCrudTest extends TestCase
     public function test_ver_el_detalle_muestra_sus_datos_foto_y_albumes(): void
     {
         $artista = Artist::factory()->for($this->ana)->create($this->datos(['photo_path' => 'artists/foto.jpg']));
-        $artista->albums()->create(['title' => 'Signos', 'year' => 1986, 'genre' => 'Rock']);
+        $signos = $artista->albums()->create(['title' => 'Signos', 'year' => 1986, 'genre' => 'Rock']);
 
         $this->actingAs($this->ana)->get("/artists/{$artista->id}")
             ->assertOk()
             ->assertSeeInOrder(['Soda Stereo', 'Argentina', 'Rock', 'Trío de Buenos Aires.', 'Signos', '1986'])
-            ->assertSee('/storage/artists/foto.jpg');
+            ->assertSee('/storage/artists/foto.jpg')
+            ->assertSee(route('albums.show', $signos))
+            ->assertSee(route('albums.create', ['artist' => $artista->id]));
+    }
+
+    public function test_agregar_album_desde_el_detalle_preselecciona_al_artista(): void
+    {
+        $artista = Artist::factory()->for($this->ana)->create();
+        Artist::factory()->for($this->ana)->create();
+
+        $this->actingAs($this->ana)->get("/albums/create?artist={$artista->id}")
+            ->assertOk()
+            ->assertSee('<option value="'.$artista->id.'" selected', false);
     }
 
     public function test_editar_cambia_los_datos_y_conserva_la_foto_si_no_llega_otra(): void

@@ -19,6 +19,13 @@ class LocaleTest extends TestCase
         $mensaje = session('errors')->first('name');
         $this->assertStringContainsString('nombre', $mensaje);
         $this->assertStringContainsString('obligatorio', $mensaje);
+
+        // Los nombres de campo propios de la app también salen en español.
+        $this->post('/albums', ['bio' => str_repeat('x', 1001)]);
+        $this->assertStringContainsString('artista', session('errors')->first('artist_id'));
+        $this->assertStringContainsString('género', session('errors')->first('genre'));
+        $this->post('/artists', ['bio' => str_repeat('x', 1001)]);
+        $this->assertStringContainsString('biografía', session('errors')->first('bio'));
     }
 
     public function test_el_login_fallido_sale_en_espanol(): void
