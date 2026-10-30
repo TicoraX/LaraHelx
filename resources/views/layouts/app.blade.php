@@ -15,7 +15,11 @@
             <a class="wordmark" href="{{ route('dashboard') }}">Discoteca</a>
 
             <div class="who">
-                <x-galleta :name="auth()->user()->name" />
+                @if (auth()->user()->photo_path)
+                    <img class="sleeve sleeve--xs" src="{{ asset('storage/'.auth()->user()->photo_path) }}" alt="" width="40" height="40">
+                @else
+                    <x-galleta :name="auth()->user()->name" />
+                @endif
                 <div>
                     <div class="who__name">{{ auth()->user()->name }}</div>
                     <div class="who__mail">{{ auth()->user()->email }}</div>
