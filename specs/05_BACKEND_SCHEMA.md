@@ -126,7 +126,7 @@ $password = ['required', 'string', Password::min(8), 'confirmed'];
 // Reset (acción ResetUserPassword). Fortify valida token y email antes.
 'password' => $password,
 
-// StoreArtistRequest / UpdateArtistRequest (web)
+// ArtistRequest (web): una sola clase para crear y editar; ignore() recibe null al crear
 'name'    => ['required', 'string', 'max:120',
               Rule::unique('artists')->where('user_id', $this->user()->id)->ignore($this->route('artist'))],
 'country' => ['nullable', 'string', 'max:80'],

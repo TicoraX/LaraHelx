@@ -1,0 +1,63 @@
+/* DataTables 2.3.x tematizado con los tokens de app.css (04 §8). Se carga solo en las listas. */
+.dt-container { display: grid; gap: 1rem; }
+.dt-layout-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.dt-length, .dt-search { display: flex; align-items: center; gap: 0.5rem; color: var(--color-ink-2); }
+.dt-input {
+  min-height: 2.75rem; padding: 0 0.75rem;
+  font: inherit; color: var(--color-ink); background: var(--color-surface);
+  border: 1px solid var(--color-control); border-radius: var(--radius-control);
+  outline: 2px solid transparent; outline-offset: 1px;
+  transition: background-color var(--dur-state) var(--ease-out);
+}
+@media (hover: hover) { .dt-input:hover { background: var(--color-canvas); } }
+.dt-input:focus-visible { outline-color: var(--color-focus); }
+.dt-search .dt-input { flex: 0 1 18rem; min-inline-size: 0; }
+/* Solo la tabla se desplaza; búsqueda y paginación quedan fijas. Sin JS, el contenedor propio hace de respaldo. */
+/* position: relative contiene los .visually-hidden (absolutos) de las acciones; si no, alargan la página. */
+.dt-layout-table > .dt-layout-cell, .table-scroll:not(:has(.dt-container)) { overflow-x: auto; position: relative; }
+.dt-layout-row, .dt-layout-cell { min-inline-size: 0; }
+
+table.dataTable { inline-size: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+table.dataTable thead th {
+  text-align: left; font-size: var(--text-sm); font-weight: 700; color: var(--color-ink-2);
+  padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-ink);
+  white-space: nowrap;
+}
+table.dataTable thead th.dt-orderable-asc, table.dataTable thead th.dt-orderable-desc { cursor: pointer; }
+table.dataTable thead th[aria-sort] { color: var(--color-ink); }
+.dt-column-order { display: inline-block; inline-size: 1em; margin-left: 0.25rem; color: var(--color-ink); }
+th[aria-sort="ascending"] .dt-column-order::before { content: "\2191"; }
+th[aria-sort="descending"] .dt-column-order::before { content: "\2193"; }
+table.dataTable tbody td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-rule); vertical-align: middle; }
+table.dataTable tbody tr { transition: background-color var(--dur-state) var(--ease-out); }
+@media (hover: hover) { table.dataTable tbody tr:hover { background: var(--color-canvas); } }
+table.dataTable .dt-type-numeric { text-align: right; }
+table.dataTable .dt-empty { padding: 1.5rem 0.75rem; color: var(--color-ink-2); text-align: center; }
+
+/* Título de fila: Josefin 700, 2 líneas como máximo; el texto completo sigue en el DOM (búsqueda y lector de pantalla). */
+.row-title {
+  font-family: var(--font-display); font-weight: 700; font-size: var(--text-md); line-height: 1.2;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+  min-inline-size: 10ch; max-inline-size: 26ch; overflow-wrap: break-word;
+}
+.cell-actions { white-space: nowrap; text-align: right; }
+.cell-actions form { display: inline; }
+
+.dt-info { color: var(--color-ink-2); font-size: var(--text-sm); }
+.dt-paging nav { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.dt-paging-button {
+  flex: none; /* con min-width explícito, flex los encogía por debajo de su texto a 375 px */
+  min-width: 2.75rem; min-height: 2.75rem; padding: 0 0.5rem;
+  font: inherit; font-variant-numeric: tabular-nums; color: var(--color-ink);
+  background: transparent; border: 1px solid transparent; border-radius: var(--radius-control); cursor: pointer;
+  transition: background-color var(--dur-state) var(--ease-out);
+}
+@media (hover: hover) { .dt-paging-button:hover { background: var(--color-sunken); } }
+.dt-paging-button:active { background: var(--color-rule); }
+.dt-paging-button.current { background: var(--color-accent); border-color: var(--color-ink); font-weight: 700; }
+.dt-paging-button.disabled { color: var(--color-ink-2); cursor: not-allowed; background: transparent; }
+
+/* Por debajo de 56rem se ocultan dos columnas y la tabla se desplaza en su contenedor (04 §7). */
+@media (max-width: 56rem) {
+  .hide-sm { display: none; }
+}

@@ -196,7 +196,11 @@ const es = {
   zeroRecords: 'Ningún registro coincide con la búsqueda',
   emptyTable: 'Sin registros',
   paginate: { first: 'Primera', last: 'Última', next: 'Siguiente', previous: 'Anterior' },
-  aria: { orderable: 'Ordenar por esta columna', orderableReverse: 'Invertir el orden' },
+  aria: {
+    orderable: 'Ordenar por esta columna',
+    orderableReverse: 'Invertir el orden',
+    paginate: { first: 'Primera página', previous: 'Página anterior', next: 'Página siguiente', last: 'Última página' },
+  },
 };
 
 document.querySelectorAll('table[data-datatable]').forEach((table) => {
@@ -208,8 +212,12 @@ document.querySelectorAll('table[data-datatable]').forEach((table) => {
     layout: { topStart: 'pageLength', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' },
     columnDefs: [{ targets: [0, -1], orderable: false, searchable: false }], // imagen y acciones
   });
+  // 2.3.8 fija aria-label="pagination" en el <nav> sin opción de idioma.
+  table.closest('.dt-container')?.querySelector('.dt-paging nav')?.setAttribute('aria-label', 'Paginación');
 });
 ```
+
+- **Scroll a 375 px**: solo la celda de la tabla (`.dt-layout-table > .dt-layout-cell`) se desplaza, con `position: relative` para contener los `.visually-hidden` absolutos de las acciones; `.main` lleva `grid-template-columns: minmax(0, 1fr)` y los botones de paginación `flex: none`.
 
 ## 9. Tokens en el código (Tailwind 4) y Chart.js
 
