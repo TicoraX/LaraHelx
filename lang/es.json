@@ -224,6 +224,8 @@
     "Unable to register this passkey.": "No se pudo registrar esta llave de acceso.",
     "Unable to sign in with this account.": "No se pudo iniciar sesión con esta cuenta.",
     "Unable to verify passkey. Please try again.": "No se pudo verificar la llave de acceso. Por favor, inténtelo de nuevo.",
+    "profile-information-updated": "Datos actualizados",
+    "password-updated": "Contraseña actualizada",
     "Unauthenticated.": "No autenticado.",
     "Unauthorized": "No autorizado",
     "Unavailable For Legal Reasons": "No disponible por razones legales",

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Support\Images;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\File;
 
 /** Crear y editar álbum (05 §3). I3: el artista tiene que ser del usuario. */
 class AlbumRequest extends FormRequest
@@ -17,8 +17,7 @@ class AlbumRequest extends FormRequest
             // APP_TIMEZONE=UTC: si cambia la zona, se revisa la regla (05 §3).
             'year' => ['required', 'integer', 'between:1900,'.(now()->year + 1)],
             'genre' => ['required', Rule::in(config('discoteca.genres'))],
-            'cover' => ['nullable', File::image()->types(['jpg', 'jpeg', 'png', 'webp'])->max(2048)
-                ->dimensions(Rule::dimensions()->maxWidth(2000)->maxHeight(2000))],
+            'cover' => Images::rules(),
         ];
     }
 
