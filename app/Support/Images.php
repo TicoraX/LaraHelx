@@ -7,6 +7,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
+use RuntimeException;
 
 /** Fotos y portadas en el disco público: validación, reemplazo y borrado (05 §3, I7). */
 final class Images
@@ -31,6 +32,21 @@ final class Images
         if ($new && $old) {
             self::delete($old);
         }
+    }
+
+    /**
+     * Miniatura cuadrada como data URI para el PDF: dompdf decodifica la imagen entera y una portada de
+     * 2000 px tarda segundos (F8). Lanza si el archivo no es una imagen legible.
+     */
+    public static function thumbnail(string $path, int $size): string
+    {
+        $original = imagecreatefromstring(Storage::disk('public')->get($path))
+            ?: throw new RuntimeException("No se pudo leer la imagen {$path}");
+        $small = imagescale($original, $size, $size);
+        ob_start();
+        imagepng($small);
+
+        return 'data:image/png;base64,'.base64_encode(ob_get_clean());
     }
 
     /** @param  string|array<int, string>|null  $paths */
