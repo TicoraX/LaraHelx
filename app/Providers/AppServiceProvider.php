@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // I2 (05 §2): lo ajeno y lo inexistente lanzan el mismo 404 antes del FormRequest.
+        // 'auth' corre antes de SubstituteBindings por la prioridad de middleware.
+        Route::bind('artist', fn (string $v) => request()->user()->artists()->findOrFail($v));
     }
 }
