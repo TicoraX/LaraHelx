@@ -157,6 +157,11 @@ return [
     'url'                    => 'El campo :attribute debe ser una URL válida.',
     'uuid'                   => 'El campo :attribute debe ser un UUID válido.',
     'attributes'             => [
+        // Campos propios de Discoteca que laravel-lang no trae (si se corre lang:update, revisar que sigan).
+        'artist_id'                => 'artista',
+        'bio'                      => 'biografía',
+        'genre'                    => 'género',
+        'token_name'               => 'nombre del token',
         'address'                  => 'dirección',
         'affiliate_url'            => 'URL de afiliado',
         'age'                      => 'edad',

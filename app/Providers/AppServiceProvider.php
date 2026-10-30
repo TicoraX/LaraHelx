@@ -23,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
         // I2 (05 §2): lo ajeno y lo inexistente lanzan el mismo 404 antes del FormRequest.
         // 'auth' corre antes de SubstituteBindings por la prioridad de middleware.
         Route::bind('artist', fn (string $v) => request()->user()->artists()->findOrFail($v));
+        Route::bind('album', fn (string $v) => request()->user()->albums()->findOrFail($v));
     }
 }

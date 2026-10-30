@@ -18,17 +18,8 @@
         <x-field name="name" label="Nombre" :value="$artist->name" maxlength="120" required autofocus />
         <x-field name="country" label="País" :value="$artist->country" maxlength="80" autocomplete="off" />
 
-        @php($error = $errors->first('genre'))
-        <div class="field">
-            <label for="genre">Género</label>
-            <select class="input" id="genre" name="genre" aria-describedby="genre-msg" required @if ($error) aria-invalid="true" @endif>
-                <option value="">Elige un género</option>
-                @foreach (config('discoteca.genres') as $genre)
-                    <option value="{{ $genre }}" @selected(old('genre', $artist->genre) === $genre)>{{ $genre }}</option>
-                @endforeach
-            </select>
-            <p class="{{ $error ? 'field__error' : 'field__help' }}" id="genre-msg">{{ $error }}</p>
-        </div>
+        <x-select name="genre" label="Género" placeholder="Elige un género" required
+            :options="array_combine(config('discoteca.genres'), config('discoteca.genres'))" :value="$artist->genre" />
 
         @php($error = $errors->first('bio'))
         <div class="field">

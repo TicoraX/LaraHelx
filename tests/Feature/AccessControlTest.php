@@ -42,6 +42,21 @@ class AccessControlTest extends TestCase
         $this->assertNotSame('Robado', $ajeno->refresh()->name);
     }
 
+    public function test_un_album_ajeno_da_404_en_show_edit_update_y_destroy(): void
+    {
+        $ajeno = Artist::factory()->create()->albums()->create(['title' => 'Ajeno', 'year' => 2000, 'genre' => 'Pop']);
+        $ana = User::factory()->create();
+        $propio = Artist::factory()->for($ana)->create();
+        $this->actingAs($ana);
+
+        $this->get("/albums/{$ajeno->id}")->assertNotFound();
+        $this->get("/albums/{$ajeno->id}/edit")->assertNotFound();
+        $this->put("/albums/{$ajeno->id}", ['artist_id' => $propio->id, 'title' => 'Robado', 'year' => 2000, 'genre' => 'Pop'])->assertNotFound();
+        $this->delete("/albums/{$ajeno->id}")->assertNotFound();
+
+        $this->assertSame('Ajeno', $ajeno->refresh()->title);
+    }
+
     public function test_el_ajeno_y_el_inexistente_responden_con_el_mismo_cuerpo(): void
     {
         $ajeno = Artist::factory()->create();
