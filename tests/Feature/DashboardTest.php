@@ -36,7 +36,7 @@ class DashboardTest extends TestCase
     {
         $response = $this->actingAs(User::factory()->create())->get('/dashboard')->assertOk();
 
-        foreach (['/dashboard', '/artists', '/albums', '/stats', '/profile'] as $path) {
+        foreach (['/dashboard', '/artists', '/albums', '/stats', '/external/users', '/profile'] as $path) {
             $response->assertSee('href="'.url($path).'"', false);
         }
         $response->assertSee('method="POST" action="'.route('logout').'"', false);
