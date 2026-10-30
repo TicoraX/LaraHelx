@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\SecurityHeaders;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -23,6 +24,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         // Postman no manda Accept: sin esto, un 401 de la API sería un 302 al login (02 §6).
         $exceptions->shouldRenderJsonWhen(fn (Request $r, Throwable $e) => $r->is('api/*') || $r->expectsJson());
+        // Laravel devuelve el mensaje de la excepción sin traducir; "Unauthenticated." está en lang/es.json (05 §4).
+        $exceptions->render(function (AuthenticationException $e, Request $r) {
+            if ($r->is('api/*')) {
+                return response()->json(['message' => __($e->getMessage())], 401);
+            }
+        });
         $exceptions->render(function (NotFoundHttpException $e, Request $r) {
             if ($r->is('api/*')) {
                 return response()->json(['message' => 'No encontrado'], 404);
