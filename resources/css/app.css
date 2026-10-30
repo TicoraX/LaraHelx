@@ -213,6 +213,10 @@
 
   /* ---------- panel, botones, enlaces ---------- */
   .panel { background: var(--color-surface); border-radius: var(--radius-panel); padding: 1.5rem; }
+  .chart { position: relative; block-size: 20rem; margin-block: 1rem; }
+  .data-table { inline-size: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .data-table th, .data-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-rule); text-align: start; }
+  .data-table__num { text-align: end !important; }
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
