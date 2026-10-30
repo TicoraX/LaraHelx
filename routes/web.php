@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExternalUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StatsController;
@@ -17,6 +18,8 @@ Route::middleware(['auth', 'cache.headers:no_store;private'])->group(function ()
     Route::resource('artists', ArtistController::class);
     Route::resource('albums', AlbumController::class);
     Route::get('/reports/artists/{artist}', [ReportController::class, 'artist'])->name('reports.artist');
+    Route::resource('external/users', ExternalUserController::class)->except('show')
+        ->parameters(['users' => 'id'])->whereNumber('id')->names('external.users');
     Route::get('/stats', StatsController::class)->name('stats');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/profile/tokens', [TokenController::class, 'store'])->name('tokens.store');

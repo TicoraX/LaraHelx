@@ -31,6 +31,7 @@
                 <a href="{{ route('artists.index') }}" @if (request()->routeIs('artists.*')) aria-current="page" @endif>Artistas</a>
                 <a href="{{ route('albums.index') }}" @if (request()->routeIs('albums.*')) aria-current="page" @endif>Álbumes</a>
                 <a href="{{ route('stats') }}" @if (request()->routeIs('stats')) aria-current="page" @endif>Estadísticas</a>
+                <a href="{{ route('external.users.index') }}" @if (request()->routeIs('external.users.*')) aria-current="page" @endif>API externa</a>
                 <a href="{{ route('profile') }}" @if (request()->routeIs('profile')) aria-current="page" @endif>Mi perfil</a>
             </nav>
 
