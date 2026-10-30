@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArtistRequest;
 use App\Models\Artist;
+use App\Support\Images;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ArtistController extends Controller
@@ -53,13 +53,8 @@ class ArtistController extends Controller
     public function update(ArtistRequest $request, Artist $artist): RedirectResponse
     {
         Gate::authorize('update', $artist);
-        $old = $artist->photo_path;
-        $new = $request->file('photo')?->store('artists', 'public');
-        // Si la fila no se guarda, la excepción sube y la foto vieja queda intacta (03 §4).
-        $artist->update([...$request->safe()->except('photo'), 'photo_path' => $new ?? $old]);
-        if ($new && $old) {
-            Storage::disk('public')->delete($old);
-        }
+        Images::replace($request->file('photo'), $artist->photo_path, 'artists',
+            fn ($path) => $artist->update([...$request->safe()->except('photo'), 'photo_path' => $path]));
 
         return redirect()->route('artists.show', $artist)->with('status', 'Artista actualizado');
     }
@@ -71,7 +66,7 @@ class ArtistController extends Controller
         // se borran solo si la fila ya no está. Si el DELETE falla, archivos y fila siguen ahí.
         $paths = $artist->albums()->pluck('cover_path')->push($artist->photo_path)->filter()->all();
         $artist->delete();
-        Storage::disk('public')->delete($paths);
+        Images::delete($paths);
 
         return redirect()->route('artists.index')->with('status', 'Artista eliminado');
     }

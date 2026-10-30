@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AlbumRequest;
 use App\Models\Album;
+use App\Support\Images;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class AlbumController extends Controller
@@ -59,13 +59,9 @@ class AlbumController extends Controller
     public function update(AlbumRequest $request, Album $album): RedirectResponse
     {
         Gate::authorize('update', $album);
-        $old = $album->cover_path;
-        $new = $request->file('cover')?->store('covers', 'public');
         // artist_id ya pasó por I3 (exists con user_id); forceFill porque no es asignable en masa.
-        $album->forceFill([...$request->safe()->except('cover'), 'cover_path' => $new ?? $old])->save();
-        if ($new && $old) {
-            Storage::disk('public')->delete($old);
-        }
+        Images::replace($request->file('cover'), $album->cover_path, 'covers',
+            fn ($path) => $album->forceFill([...$request->safe()->except('cover'), 'cover_path' => $path])->save());
 
         return redirect()->route('albums.show', $album)->with('status', 'Álbum actualizado');
     }
@@ -75,9 +71,7 @@ class AlbumController extends Controller
         Gate::authorize('delete', $album);
         // La portada se borra solo si el DELETE pasó (03 §4).
         $album->delete();
-        if ($album->cover_path) {
-            Storage::disk('public')->delete($album->cover_path);
-        }
+        Images::delete($album->cover_path);
 
         return redirect()->route('albums.index')->with('status', 'Álbum eliminado');
     }

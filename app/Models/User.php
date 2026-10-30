@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -48,6 +50,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * I8 (05 §2): cambiar la contraseña cierra las otras sesiones, invalida "Recordarme" y revoca los
+     * tokens de API, todo en una transacción. $keepSession es la sesión actual (null al restablecer).
+     */
+    public function changePassword(string $password, ?string $keepSession = null): void
+    {
+        DB::transaction(function () use ($password, $keepSession) {
+            $this->forceFill(['password' => $password])->setRememberToken(Str::random(60));
+            $this->save();
+            DB::table('sessions')->where('user_id', $this->id)
+                ->when($keepSession, fn ($q) => $q->where('id', '!=', $keepSession))->delete();
+            $this->tokens()->delete();
+        });
     }
 
     public function artists(): HasMany
