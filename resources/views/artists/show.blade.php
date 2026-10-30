@@ -20,6 +20,7 @@
             <div class="page-head__actions">
                 <a class="btn btn--primary" href="{{ route('albums.create', ['artist' => $artist->id]) }}">Agregar álbum</a>
                 <a class="btn btn--secondary" href="{{ route('artists.edit', $artist) }}">Editar</a>
+                <a class="btn btn--secondary" href="{{ route('reports.artist', $artist) }}">Descargar PDF</a>
                 <x-delete-form :action="route('artists.destroy', $artist)" :name="$artist->name" :albums="$albums->count()" />
             </div>
         </div>
