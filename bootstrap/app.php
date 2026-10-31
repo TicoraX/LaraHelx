@@ -5,6 +5,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -33,6 +34,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (NotFoundHttpException $e, Request $r) {
             if ($r->is('api/*')) {
                 return response()->json(['message' => 'No encontrado'], 404);
+            }
+        });
+        // "Too Many Attempts." viene fijo del middleware de throttle (05 §4: mensajes traducidos).
+        $exceptions->render(function (ThrottleRequestsException $e, Request $r) {
+            if ($r->is('api/*')) {
+                return response()->json(['message' => 'Demasiados intentos.'], 429, $e->getHeaders());
             }
         });
     })->create();
