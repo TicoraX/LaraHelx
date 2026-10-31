@@ -52,7 +52,9 @@
 
         @if (session('new_token'))
             <div class="flash" role="status">
-                <span>Copia tu token ahora, no podrás verlo de nuevo: <code>{{ session('new_token') }}</code></span>
+                <span>Copia tu token ahora, no podrás verlo de nuevo: <code id="token-nuevo" class="token">{{ session('new_token') }}</code></span>
+                {{-- Oculto hasta que app.js lo active: sin JS queda el texto seleccionable. --}}
+                <button type="button" data-copy="token-nuevo" aria-live="polite" hidden>Copiar</button>
             </div>
         @endif
 

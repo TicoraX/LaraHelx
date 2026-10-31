@@ -59,6 +59,18 @@ document.querySelectorAll('input[data-match]').forEach((confirmation) => {
 // Formulario devuelto con errores: el foco va al primer campo inválido (04 §6).
 document.querySelector('[aria-invalid="true"]')?.focus();
 
+// Copiar el token recién creado (03 §2). Si el navegador niega el portapapeles, se dice; el texto sigue seleccionable.
+document.querySelectorAll('[data-copy]').forEach((button) => {
+  const source = document.getElementById(button.dataset.copy);
+  button.hidden = false;
+  button.addEventListener('click', () => {
+    navigator.clipboard.writeText(source.textContent).then(
+      () => { button.textContent = 'Copiado'; },
+      () => { button.textContent = 'No se pudo copiar'; },
+    );
+  });
+});
+
 // Flash: se cierra solo con su botón, nunca por tiempo.
 document.addEventListener('click', (event) => {
   event.target.closest('[data-dismiss]')?.parentElement.remove();
