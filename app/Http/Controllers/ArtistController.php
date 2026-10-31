@@ -27,11 +27,9 @@ class ArtistController extends Controller
 
     public function store(ArtistRequest $request): RedirectResponse
     {
-        $artist = $request->user()->artists()->create([
-            ...$request->safe()->except('photo'),
-            // I7: store() genera el nombre aleatorio y deriva la extensión del MIME.
-            'photo_path' => $request->file('photo')?->store('artists', 'public'),
-        ]);
+        // I7 en Images::replace; si el insert falla, la foto recién subida se borra.
+        $artist = Images::replace($request->file('photo'), null, 'artists',
+            fn ($path) => $request->user()->artists()->create([...$request->safe()->except('photo'), 'photo_path' => $path]));
 
         return redirect()->route('artists.show', $artist)->with('status', 'Artista creado');
     }

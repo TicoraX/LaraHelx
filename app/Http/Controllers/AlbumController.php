@@ -33,11 +33,10 @@ class AlbumController extends Controller
 
     public function store(AlbumRequest $request): RedirectResponse
     {
-        $album = $request->user()->artists()->findOrFail($request->validated('artist_id'))->albums()->create([
-            ...$request->safe()->except(['artist_id', 'cover']),
-            // I7: nombre aleatorio y extensión derivada del MIME.
-            'cover_path' => $request->file('cover')?->store('covers', 'public'),
-        ]);
+        $artist = $request->user()->artists()->findOrFail($request->validated('artist_id'));
+        // I7 en Images::replace; si el insert falla, la portada recién subida se borra.
+        $album = Images::replace($request->file('cover'), null, 'covers',
+            fn ($path) => $artist->albums()->create([...$request->safe()->except(['artist_id', 'cover']), 'cover_path' => $path]));
 
         return redirect()->route('albums.show', $album)->with('status', 'Álbum creado');
     }
