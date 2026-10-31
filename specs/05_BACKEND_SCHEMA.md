@@ -2,14 +2,16 @@
 document: 05_BACKEND_SCHEMA
 stage: 5
 status: APPROVED
-version: 1.1.0
-last_updated: 2026-10-24
+version: 1.2.0
+last_updated: 2026-10-31
 approved_by: human
 depends_on: [02_TRD, 03_APP_FLOW]
 ---
 
 # 05. Backend Schema y Contratos
 
+> v1.2.0 (2026-10-31): `country` pasa a lista cerrada (commit `de53582`); la bio respeta saltos con `white-space: pre-line`.
+>
 > v1.1.0 (2026-10-24): corregido según `REVIEW_05-06.md` (A1, A2, A3, A6, M1, M4, M5, M6, M7, M8, M12, M13, B1, sobrediseño de §5).
 
 Documento corto por decisión del TRD §8.4: las migraciones son la fuente de verdad; aquí van las columnas, las invariantes, la validación y los contratos que las migraciones y los tests tienen que respetar. Glosario del dominio en `CONTEXT.md` (raíz del repo).
@@ -38,7 +40,7 @@ Tablas propias: `users`, `artists`, `albums`. De Laravel y Sanctum, sin cambios:
 | `id` | `char(26)` ULID | PK (`HasUlids`). Va en URLs y en la API: no es secuencial ni adivinable. |
 | `user_id` | `bigint` | `NOT NULL`, FK a `users.id` `ON DELETE CASCADE`. |
 | `name` | `varchar(120)` | `NOT NULL`. `UNIQUE (user_id, name)`: un usuario no repite artista. Distingue mayúsculas (techo conocido; ver §5). |
-| `country` | `varchar(80)` | Nullable, texto libre. |
+| `country` | `varchar(80)` | Nullable, valor de la lista cerrada de países (`config/discoteca.php`, nombres en español de ICU). |
 | `genre` | `varchar(30)` | `NOT NULL`, valor de la lista cerrada de géneros (§2). |
 | `bio` | `text` | Nullable; la validación limita a 1000 caracteres. |
 | `photo_path` | `varchar(255)` | Nullable (`artists/<aleatorio>.<ext>`). |
@@ -129,7 +131,7 @@ $password = ['required', 'string', Password::min(8), 'confirmed'];
 // ArtistRequest (web): una sola clase para crear y editar; ignore() recibe null al crear
 'name'    => ['required', 'string', 'max:120',
               Rule::unique('artists')->where('user_id', $this->user()->id)->ignore($this->route('artist'))],
-'country' => ['nullable', 'string', 'max:80'],
+'country' => ['nullable', Rule::in(config('discoteca.countries'))],
 'genre'   => ['required', Rule::in(config('discoteca.genres'))],
 'bio'     => ['nullable', 'string', 'max:1000'],
 'photo'   => $imagen,
