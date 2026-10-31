@@ -151,6 +151,16 @@ class ArtistCrudTest extends TestCase
         $this->assertStringNotContainsString('evil', $ruta);
     }
 
+    public function test_un_pais_que_no_existe_da_error_y_el_formulario_sugiere_los_reales(): void
+    {
+        $this->actingAs($this->ana)->get('/artists/create')
+            ->assertSee('list="paises"', false)
+            ->assertSee('<option value="Colombia">', false);
+
+        $this->post('/artists', $this->datos(['country' => 'Checoslovaquia']))->assertSessionHasErrors('country');
+        $this->post('/artists', $this->datos(['country' => 'Colombia']))->assertSessionHasNoErrors();
+    }
+
     public function test_un_genero_fuera_de_la_lista_da_error_de_validacion(): void
     {
         $this->actingAs($this->ana)->post('/artists', $this->datos(['genre' => 'rock']))

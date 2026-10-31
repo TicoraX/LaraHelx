@@ -16,7 +16,7 @@ class ArtistFactory extends Factory
         return [
             'user_id' => User::factory(),
             'name' => fake()->unique()->company(),
-            'country' => fake()->country(),
+            'country' => fake()->randomElement(config('discoteca.countries')),
             'genre' => fake()->randomElement(config('discoteca.genres')),
             'bio' => null,
             'photo_path' => null,

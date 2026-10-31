@@ -14,7 +14,7 @@ class ArtistRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:120',
                 Rule::unique('artists')->where('user_id', $this->user()->id)->ignore($this->route('artist'))],
-            'country' => ['nullable', 'string', 'max:80'],
+            'country' => ['nullable', Rule::in(config('discoteca.countries'))],
             'genre' => ['required', Rule::in(config('discoteca.genres'))],
             'bio' => ['nullable', 'string', 'max:1000'],
             // El tipo se decide por el contenido (fileinfo), no por la extensión del cliente.
