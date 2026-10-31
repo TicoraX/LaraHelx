@@ -17,7 +17,7 @@ class TokenUiTest extends TestCase
         $this->actingAs($ana)->post('/profile/tokens', ['token_name' => 'Postman'])->assertRedirect('/profile');
         $plano = $ana->tokens()->sole()->id.'|';
 
-        $this->actingAs($ana)->get('/profile')->assertSee($plano)->assertSee('no podrás verlo de nuevo');
+        $this->actingAs($ana)->get('/profile')->assertSee($plano)->assertSee('no podrás verlo de nuevo')->assertSee('data-copy="token-nuevo"', false);
         $this->actingAs($ana)->get('/profile')->assertDontSee($plano);
     }
 
