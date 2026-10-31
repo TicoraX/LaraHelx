@@ -18,8 +18,8 @@ Hoja implementable para el equipo. Identidad propia de Discoteca (no hereda ESti
 
 Artefactos de apoyo:
 
-- `specs/design/prototype.html`: maqueta estática del riel lateral, la lista de artistas con estilo DataTables, el estado vacío, los estados de botón y el diálogo de borrado. No carga DataTables ni Chart.js reales (ver §10).
-- `specs/design/contrast.mjs`: mide el contraste WCAG de los tokens del prototipo. Ya dio 0 fallas; solo se vuelve a correr si cambia un color.
+- `notas/design/prototype.html` (fuera de git): maqueta estática del riel lateral, la lista de artistas con estilo DataTables, el estado vacío, los estados de botón y el diálogo de borrado. No carga DataTables ni Chart.js reales (ver §10).
+- `notas/design/contrast.mjs` (fuera de git): mide el contraste WCAG de los tokens del prototipo. Ya dio 0 fallas; solo se vuelve a correr si cambia un color.
 
 ## 1. Dirección
 
@@ -60,7 +60,7 @@ Fuente única: el bloque de §9. El hex es la conversión exacta y solo se usa d
 
 ### Contraste medido
 
-Salida de `node specs/design/contrast.mjs` (WCAG 2.x, calculado desde OKLCH). Al texto principal se le exige 7:1 porque el proyector lava el contraste.
+Salida de `node notas/design/contrast.mjs` (WCAG 2.x, calculado desde OKLCH). Al texto principal se le exige 7:1 porque el proyector lava el contraste.
 
 | Texto / elemento | Fondo | Razón | Mínimo | Resultado | Uso |
 | :--- | :--- | ---: | ---: | :--- | :--- |

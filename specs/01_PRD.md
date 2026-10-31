@@ -5,7 +5,7 @@ status: APPROVED
 version: 1.2.0
 last_updated: 2026-10-24
 approved_by: human
-depends_on: [00_REALITY_CHECK]
+depends_on: []  # 00_REALITY_CHECK quedó en notas/, fuera de git
 ---
 
 # 01. Product Requirements Document (PRD)
