@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use RuntimeException;
+use Throwable;
 
 /** Fotos y portadas en el disco público: validación, reemplazo y borrado (05 §3, I7). */
 final class Images
@@ -21,17 +22,28 @@ final class Images
 
     /**
      * Guarda el archivo nuevo, ejecuta $save con la ruta resultante (la nueva o la vieja) y solo después
-     * borra la vieja. Si $save lanza, la imagen vieja queda intacta (03 §4). store() genera el nombre (I7).
+     * borra la vieja. Si $save lanza, la imagen vieja queda intacta, la nueva se borra y la excepción
+     * sigue (03 §4). Al crear, $old es null. store() genera el nombre (I7).
      *
-     * @param  Closure(?string): mixed  $save
+     * @template T
+     *
+     * @param  Closure(?string): T  $save
+     * @return T
      */
-    public static function replace(?UploadedFile $file, ?string $old, string $dir, Closure $save): void
+    public static function replace(?UploadedFile $file, ?string $old, string $dir, Closure $save): mixed
     {
         $new = $file?->store($dir, 'public');
-        $save($new ?? $old);
+        try {
+            $saved = $save($new ?? $old);
+        } catch (Throwable $e) {
+            self::delete($new);
+            throw $e;
+        }
         if ($new && $old) {
             self::delete($old);
         }
+
+        return $saved;
     }
 
     /**

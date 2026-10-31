@@ -27,6 +27,29 @@ class ArtistCrudTest extends TestCase
         return ['name' => 'Soda Stereo', 'country' => 'Argentina', 'genre' => 'Rock', 'bio' => 'Trío de Buenos Aires.', ...$extra];
     }
 
+    public function test_si_falla_el_insert_la_foto_no_queda_huerfana(): void
+    {
+        Artist::creating(fn () => throw new \RuntimeException('falla la BD'));
+
+        $this->actingAs($this->ana)->post('/artists', $this->datos([
+            'photo' => UploadedFile::fake()->image('cerati.jpg'),
+        ]))->assertStatus(500);
+
+        $this->assertSame([], Storage::disk('public')->allFiles());
+    }
+
+    public function test_si_falla_el_update_la_foto_nueva_no_queda_huerfana(): void
+    {
+        $artista = Artist::factory()->for($this->ana)->create($this->datos());
+        Artist::updating(fn () => throw new \RuntimeException('falla la BD'));
+
+        $this->actingAs($this->ana)->put("/artists/{$artista->id}", $this->datos([
+            'photo' => UploadedFile::fake()->image('nueva.png'),
+        ]))->assertStatus(500);
+
+        $this->assertSame([], Storage::disk('public')->allFiles());
+    }
+
     public function test_crear_un_artista_con_foto_lleva_a_su_detalle(): void
     {
         $respuesta = $this->actingAs($this->ana)->post('/artists', $this->datos([
