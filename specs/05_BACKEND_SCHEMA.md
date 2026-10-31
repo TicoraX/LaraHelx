@@ -213,7 +213,7 @@ Perfil mixto: las rutas web son **Perfil B** (SSR con cookie de sesión: el ries
 | 4, 13 | Permisos solo en la UI / IDOR | Middleware `auth` en todo el grupo; `Route::bind` con alcance de usuario y Policies con `denyAsNotFound` (I2). Tests de acceso cruzado por recurso, web y API (F1, F9). |
 | 5, 29 | Fuerza bruta | Login 5/min por correo e IP (Fortify); `POST /forgot-password` 6/min por IP (middleware agregado a la ruta `password.email`, 02 §3); `POST /api/v1/tokens` 5/min. El contador vive en la caché de base de datos, que sobrevive reinicios. F18 y F9. |
 | 7 | Validación en el servidor | FormRequests de §3 en cada mutación, web y API. |
-| 8 | XSS | Blade escapa con `{{ }}`; prohibido `{!! !!}` con datos del usuario. La bio se muestra con `nl2br(e($bio))`. CSP `script-src 'self'`. |
+| 8 | XSS | Blade escapa con `{{ }}`; prohibido `{!! !!}` con datos del usuario. La bio se muestra con `{{ }}` y `white-space: pre-line` (respeta los saltos sin `{!! !!}`). CSP `script-src 'self'`. |
 | 14 | IDs predecibles | ULID en `artists` y `albums`; `users.id` nunca sale en URLs ni en la API. |
 | 15, 18 | Cabeceras | Middleware de producción: CSP del TRD, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security: max-age=31536000`. El TLD `.page` ya está en la lista de precarga HSTS de los navegadores. F12 y S4. |
 | 17 | Fugas de errores | `APP_DEBUG=false`, páginas de error propias, JSON limpio en la API sin nombres de clase (§4). |

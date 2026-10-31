@@ -14,7 +14,7 @@
             <h1 id="t-artista">{{ $artist->name }}</h1>
             <p class="detail__meta">{{ collect([$artist->country, $artist->genre])->filter()->implode(' · ') }}</p>
             @if ($artist->bio)
-                <p>{{ $artist->bio }}</p>
+                <p class="bio">{{ $artist->bio }}</p>
             @endif
 
             <div class="page-head__actions">

@@ -164,6 +164,8 @@
   .detail__data { display: grid; gap: 0.75rem; flex: 1 1 20rem; }
   .detail__data h1 { margin: 0; }
   .detail__data p { margin: 0; }
+  /* Respeta los saltos de línea de la bio sin {!! nl2br() !!}: Blade sigue escapando (05 §5). */
+  .bio { white-space: pre-line; }
   .detail__meta { color: var(--color-ink-2); }
   .covers { display: grid; grid-template-columns: repeat(auto-fill, 160px); gap: 1.5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
   .covers li { display: grid; gap: 0.25rem; }
