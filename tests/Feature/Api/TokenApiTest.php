@@ -49,6 +49,6 @@ class TokenApiTest extends TestCase
             $this->pedir()->assertStatus(422);
         }
 
-        $this->pedir()->assertStatus(429)->assertHeader('Retry-After');
+        $this->pedir()->assertStatus(429)->assertHeader('Retry-After')->assertJsonPath('message', 'Demasiados intentos.');
     }
 }
