@@ -16,7 +16,14 @@
         <x-form-errors />
 
         <x-field name="name" label="Nombre" :value="$artist->name" maxlength="120" required autofocus />
-        <x-field name="country" label="País" :value="$artist->country" maxlength="80" autocomplete="off" />
+        {{-- Se escribe con sugerencias; el servidor solo acepta nombres de la lista (config discoteca.countries). --}}
+        <x-field name="country" label="País" :value="$artist->country" list="paises" autocomplete="off"
+            help="Escribe y elige de la lista." />
+        <datalist id="paises">
+            @foreach (config('discoteca.countries') as $country)
+                <option value="{{ $country }}">
+            @endforeach
+        </datalist>
 
         <x-select name="genre" label="Género" placeholder="Elige un género" required
             :options="array_combine(config('discoteca.genres'), config('discoteca.genres'))" :value="$artist->genre" />
