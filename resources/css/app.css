@@ -266,6 +266,19 @@
     border: 1px solid var(--color-control); border-radius: var(--radius-control); cursor: pointer;
   }
   .panel--form { max-inline-size: 40rem; }
+
+  /* Contraseña con botón para mostrarla dentro del campo. */
+  .password { position: relative; }
+  .password .input { padding-right: 3rem; }
+  .password__toggle {
+    position: absolute; inset-block: 0; right: 0; inline-size: 2.75rem;
+    display: grid; place-items: center; color: var(--color-ink-2);
+    background: none; border: 0; border-radius: var(--radius-control); cursor: pointer;
+  }
+  .password__toggle:active { background: var(--color-sunken); }
+  .password__toggle[aria-pressed="false"] .password__slash { display: none; }
+  .field__help[data-state="ok"] { color: var(--color-success); font-weight: 700; }
+  .field__help[data-state="error"] { color: var(--color-danger); font-weight: 700; }
   .input[aria-invalid="true"] { border-color: var(--color-danger); }
   .field__help { min-height: 1lh; font-size: var(--text-sm); line-height: 1.4; color: var(--color-ink-2); }
   .field__error { min-height: 1lh; font-size: var(--text-sm); line-height: 1.4; color: var(--color-danger); font-weight: 700; }

@@ -29,6 +29,33 @@ document.addEventListener('submit', (event) => {
   button.textContent = button.dataset.busyText ?? 'Guardando…';
 });
 
+// Mostrar u ocultar la contraseña. El botón viene oculto para que sin JS no aparezca.
+document.querySelectorAll('[data-toggle-password]').forEach((button) => {
+  const input = document.getElementById(button.getAttribute('aria-controls'));
+  button.hidden = false;
+  button.addEventListener('click', () => {
+    const visible = input.type === 'password';
+    input.type = visible ? 'text' : 'password';
+    button.setAttribute('aria-pressed', String(visible));
+    button.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
+  });
+});
+
+// Confirmación en vivo: solo una ayuda visual; la validación real la hace el servidor.
+document.querySelectorAll('input[data-match]').forEach((confirmation) => {
+  const original = confirmation.form?.querySelector(`input[name="${confirmation.dataset.match}"]`);
+  const message = document.getElementById(confirmation.getAttribute('aria-describedby'));
+  if (!original || !message?.classList.contains('field__help')) return; // con error del servidor, manda el servidor
+  const check = () => {
+    const done = confirmation.value !== '';
+    const same = done && confirmation.value === original.value;
+    message.textContent = done ? (same ? 'Las contraseñas coinciden.' : 'Las contraseñas no coinciden.') : '';
+    message.dataset.state = done ? (same ? 'ok' : 'error') : '';
+  };
+  confirmation.addEventListener('input', check);
+  original.addEventListener('input', () => confirmation.value && check());
+});
+
 // Formulario devuelto con errores: el foco va al primer campo inválido (04 §6).
 document.querySelector('[aria-invalid="true"]')?.focus();
 
