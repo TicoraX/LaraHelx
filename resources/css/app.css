@@ -273,9 +273,10 @@
   .password { position: relative; }
   .password .input { padding-right: 3rem; }
   .password__toggle {
-    position: absolute; inset-block: 0; right: 0; inline-size: 2.75rem;
+    /* 1px adentro: el fondo de :active no tapa el borde del input. */
+    position: absolute; inset-block: 1px; right: 1px; inline-size: 2.75rem;
     display: grid; place-items: center; color: var(--color-ink-2);
-    background: none; border: 0; border-radius: var(--radius-control); cursor: pointer;
+    background: none; border: 0; border-radius: calc(var(--radius-control) - 1px); cursor: pointer;
   }
   .password__toggle:active { background: var(--color-sunken); }
   .password__toggle[aria-pressed="false"] .password__slash { display: none; }
