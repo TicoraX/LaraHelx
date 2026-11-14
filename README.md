@@ -13,6 +13,10 @@ Es un proyecto de la universidad hecho en Laravel 12. Está publicado en https:/
 - API REST en `/api/v1` con tokens de Sanctum: `POST /tokens` y el CRUD de artistas.
 - Consumo de [GoRest](https://gorest.co.in) con token, para crear, editar y borrar usuarios externos.
 
+## Documentos
+
+- `docs/LaraHelx.postman_collection.json`: la colección de Postman de la API. Al importarla, `baseUrl` apunta a producción; `POST /api/v1/tokens` guarda el token en la variable `token` y las demás peticiones lo usan.
+
 ## Stack
 
 PHP 8.4, Laravel 12 y PostgreSQL 17. El frontend se compila con Vite y Tailwind 4; DataTables 2.3 y Chart.js se instalan por npm. En producción la app corre en FrankenPHP dentro de Docker, detrás de Caddy.
