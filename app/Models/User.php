@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
 
     /**
-     * I8 (05 §2): cambiar la contraseña cierra las otras sesiones, invalida "Recordarme" y revoca los
+     * Cambiar la contraseña cierra las otras sesiones, invalida "Recordarme" y revoca los
      * tokens de API, todo en una transacción. $keepSession es la sesión actual (null al restablecer).
      */
     public function changePassword(string $password, ?string $keepSession = null): void
@@ -72,7 +72,7 @@ class User extends Authenticatable
         return $this->hasMany(Artist::class);
     }
 
-    /** El dueño de un álbum es el de su artista (05 §1). */
+    /** El dueño de un álbum es el de su artista. */
     public function albums(): HasManyThrough
     {
         return $this->hasManyThrough(Album::class, Artist::class);

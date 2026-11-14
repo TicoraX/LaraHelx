@@ -7,7 +7,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 /**
- * Frontera con GoRest (02 §6, 03 §2). Los errores se clasifican por código de estado, nunca por el
+ * Frontera con GoRest. Los errores se clasifican por código de estado, nunca por el
  * texto del cuerpo, y una respuesta con forma inesperada es un error: no se pinta a medias.
  */
 class GoRestClient
@@ -80,7 +80,7 @@ class GoRestClient
 
         $http = Http::baseUrl($base)->withToken($token)->acceptJson()->connectTimeout(3)->timeout(6);
         if ($get) {
-            // Solo los GET se reintentan, y solo ante un fallo de conexión (02 §6).
+            // Solo los GET se reintentan, y solo ante un fallo de conexión.
             $http = $http->retry(2, 200, fn ($e) => $e instanceof ConnectionException, throw: false);
         }
 

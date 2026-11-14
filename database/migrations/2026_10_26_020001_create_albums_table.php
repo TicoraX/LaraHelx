@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Sin user_id: el dueño de un álbum es el de su artista (05 §1).
+        // Sin user_id: el dueño de un álbum es el de su artista.
         Schema::create('albums', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('artist_id')->index()->constrained()->cascadeOnDelete();

@@ -6,7 +6,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 
-/** Tokens de API desde la UI (03 §1): el valor en claro viaja una sola vez, por flash. */
+/** Tokens de API desde la UI: el valor en claro viaja una sola vez, por flash. */
 class TokenController extends Controller
 {
     public function store(Request $request): RedirectResponse

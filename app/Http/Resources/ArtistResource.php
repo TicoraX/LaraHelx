@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-/** Recurso Artist de 05 §4. */
+/** Recurso Artist. */
 class ArtistResource extends JsonResource
 {
     public function toArray(Request $request): array

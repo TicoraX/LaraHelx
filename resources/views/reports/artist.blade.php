@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Ficha de {{ $artist->name }}</title>
-    {{-- dompdf entiende CSS 2.1: sin flex, grid, variables ni oklch (04 §9). Colores en hex. --}}
+    {{-- dompdf entiende CSS 2.1: sin flex, grid, variables ni oklch. Colores en hex. --}}
     <style>
         @page { margin: 18mm 16mm 20mm; }
         body { font-family: "DejaVu Sans", sans-serif; font-size: 10pt; color: #161b22; }

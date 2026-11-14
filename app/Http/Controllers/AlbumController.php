@@ -16,7 +16,7 @@ class AlbumController extends Controller
     {
         $user = $request->user();
 
-        // Una consulta: el hasManyThrough ya une artists; columnas calificadas (05 §2).
+        // Una consulta: el hasManyThrough ya une artists; columnas calificadas.
         return view('albums.index', [
             'albums' => $user->albums()
                 ->select('albums.id', 'albums.title', 'albums.year', 'albums.genre', 'albums.cover_path', 'artists.name as artist_name')
@@ -34,7 +34,7 @@ class AlbumController extends Controller
     public function store(AlbumRequest $request): RedirectResponse
     {
         $artist = $request->user()->artists()->findOrFail($request->validated('artist_id'));
-        // I7 en Images::replace; si el insert falla, la portada recién subida se borra.
+        // Images::replace lo resuelve; si el insert falla, la portada recién subida se borra.
         $album = Images::replace($request->file('cover'), null, 'covers',
             fn ($path) => $artist->albums()->create([...$request->safe()->except(['artist_id', 'cover']), 'cover_path' => $path]));
 
@@ -58,7 +58,7 @@ class AlbumController extends Controller
     public function update(AlbumRequest $request, Album $album): RedirectResponse
     {
         Gate::authorize('update', $album);
-        // artist_id ya pasó por I3 (exists con user_id); forceFill porque no es asignable en masa.
+        // artist_id ya pasó la regla exists con user_id; forceFill porque no es asignable en masa.
         Images::replace($request->file('cover'), $album->cover_path, 'covers',
             fn ($path) => $album->forceFill([...$request->safe()->except('cover'), 'cover_path' => $path])->save());
 
@@ -68,14 +68,14 @@ class AlbumController extends Controller
     public function destroy(Album $album): RedirectResponse
     {
         Gate::authorize('delete', $album);
-        // La portada se borra solo si el DELETE pasó (03 §4).
+        // La portada se borra solo si el DELETE pasó.
         $album->delete();
         Images::delete($album->cover_path);
 
         return redirect()->route('albums.index')->with('status', 'Álbum eliminado');
     }
 
-    /** Selector con solo los artistas del usuario (H8); sin artistas, la vista muestra el CTA. */
+    /** Selector con solo los artistas del usuario; sin artistas, la vista muestra el CTA. */
     private function form(Request $request, Album $album): View
     {
         return view('albums.form', [

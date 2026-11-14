@@ -10,7 +10,7 @@ use App\Http\Controllers\StatsController;
 use App\Http\Controllers\TokenController;
 use Illuminate\Support\Facades\Route;
 
-// Sin closures: route:cache falla con ellas (02 §4).
+// Sin closures: route:cache falla con ellas.
 Route::view('/', 'landing')->name('home');
 
 Route::middleware(['auth', 'cache.headers:no_store;private'])->group(function () {

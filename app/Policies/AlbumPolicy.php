@@ -6,7 +6,7 @@ use App\Models\Album;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-/** Segunda línea de I2, como ArtistPolicy: el dueño del álbum es el de su artista (05 §1). */
+/** Segunda línea de defensa, como ArtistPolicy: el dueño del álbum es el de su artista. */
 class AlbumPolicy
 {
     public function view(User $user, Album $album): Response

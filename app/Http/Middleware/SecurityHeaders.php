@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Cabeceras de 05 §5. Solo en producción: el servidor de Vite en desarrollo
+ * Cabeceras de seguridad. Solo en producción: el servidor de Vite en desarrollo
  * sirve scripts desde otro origen y la CSP los bloquearía.
  */
 class SecurityHeaders

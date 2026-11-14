@@ -10,7 +10,7 @@
     </header>
 
     @if ($artists->isEmpty())
-        {{-- 03 §2: sin artistas no hay formulario; primero se crea un artista. --}}
+        {{-- Sin artistas no hay formulario; primero se crea un artista. --}}
         <div class="empty">
             <h2>Primero crea un artista</h2>
             <p>Cada álbum pertenece a un artista de tu catálogo.</p>

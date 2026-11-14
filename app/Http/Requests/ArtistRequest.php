@@ -6,7 +6,7 @@ use App\Support\Images;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-/** Crear y editar artista (05 §3): mismas reglas, ignore() es null al crear. */
+/** Crear y editar artista: mismas reglas, ignore() es null al crear. */
 class ArtistRequest extends FormRequest
 {
     public function rules(): array

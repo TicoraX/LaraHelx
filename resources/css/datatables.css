@@ -1,4 +1,4 @@
-/* DataTables 2.3.x tematizado con los tokens de app.css (04 §8). Se carga solo en las listas. */
+/* DataTables 2.3.x tematizado con los tokens de app.css. Se carga solo en las listas. */
 .dt-container { display: grid; gap: 1rem; }
 .dt-layout-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .dt-length, .dt-search { display: flex; align-items: center; gap: 0.5rem; color: var(--color-ink-2); }
@@ -57,7 +57,7 @@ table.dataTable .dt-empty { padding: 1.5rem 0.75rem; color: var(--color-ink-2); 
 .dt-paging-button.current { background: var(--color-accent); border-color: var(--color-ink); font-weight: 700; }
 .dt-paging-button.disabled { color: var(--color-ink-2); cursor: not-allowed; background: transparent; }
 
-/* Por debajo de 56rem se ocultan dos columnas y la tabla se desplaza en su contenedor (04 §7). */
+/* Por debajo de 56rem se ocultan dos columnas y la tabla se desplaza en su contenedor. */
 @media (max-width: 56rem) {
   .hide-sm { display: none; }
 }

@@ -1,5 +1,5 @@
 @props(['name', 'label', 'options', 'value' => null, 'placeholder', 'help' => null])
-{{-- Mismo contrato que x-field (04 §6); $options es [valor => texto]. --}}
+{{-- Mismo contrato que x-field; $options es [valor => texto]. --}}
 @php
     $error = $errors->first($name);
     $selected = (string) old($name, $value);

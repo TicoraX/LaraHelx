@@ -43,7 +43,7 @@ return [
             'root' => storage_path('app/public'),
             'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
-            // Fail-fast (02 §3): sin esto, store() devuelve false y la fila queda con una imagen rota.
+            // Fail-fast: sin esto, store() devuelve false y la fila queda con una imagen rota.
             'throw' => true,
             'report' => false,
         ],

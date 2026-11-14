@@ -19,14 +19,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Seguro solo porque el puerto se publica en 127.0.0.1 y solo Caddy le habla (02 §3).
+        // Seguro solo porque el puerto se publica en 127.0.0.1 y solo Caddy le habla.
         $middleware->trustProxies(at: '*');
         $middleware->append(SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // Postman no manda Accept: sin esto, un 401 de la API sería un 302 al login (02 §6).
+        // Postman no manda Accept: sin esto, un 401 de la API sería un 302 al login.
         $exceptions->shouldRenderJsonWhen(fn (Request $r, Throwable $e) => $r->is('api/*') || $r->expectsJson());
-        // Laravel devuelve el mensaje de la excepción sin traducir; "Unauthenticated." está en lang/es.json (05 §4).
+        // Laravel devuelve el mensaje de la excepción sin traducir; "Unauthenticated." está en lang/es.json.
         $exceptions->render(function (AuthenticationException $e, Request $r) {
             if ($r->is('api/*')) {
                 return response()->json(['message' => __($e->getMessage())], 401);
@@ -37,7 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json(['message' => 'No encontrado'], 404);
             }
         });
-        // "Too Many Attempts." viene fijo del middleware de throttle (05 §4: mensajes traducidos).
+        // "Too Many Attempts." viene fijo del middleware de throttle (mensajes traducidos).
         $exceptions->render(function (ThrottleRequestsException $e, Request $r) {
             if ($r->is('api/*')) {
                 return response()->json(['message' => 'Demasiados intentos.'], 429, $e->getHeaders());

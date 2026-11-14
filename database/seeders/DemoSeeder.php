@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use RuntimeException;
 
 /**
- * Datos de demostración (05 §6): discografías públicas, sin fotos. Idempotente: se puede correr
+ * Datos de demostración: discografías públicas, sin fotos. Idempotente: se puede correr
  * dos veces (el día de la demo corre en producción con --force) y deja los mismos conteos.
  */
 class DemoSeeder extends Seeder

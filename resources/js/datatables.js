@@ -1,6 +1,6 @@
 import DataTable from 'datatables.net-dt';
 
-// Configuración de 04 §8. La tabla llega completa del servidor: sin JS queda la tabla HTML.
+// Configuración de DataTables. La tabla llega completa del servidor: sin JS queda la tabla HTML.
 const es = {
   search: 'Buscar',
   lengthMenu: '_MENU_ filas por página',

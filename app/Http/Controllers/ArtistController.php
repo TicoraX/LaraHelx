@@ -27,7 +27,7 @@ class ArtistController extends Controller
 
     public function store(ArtistRequest $request): RedirectResponse
     {
-        // I7 en Images::replace; si el insert falla, la foto recién subida se borra.
+        // Images::replace lo resuelve; si el insert falla, la foto recién subida se borra.
         $artist = Images::replace($request->file('photo'), null, 'artists',
             fn ($path) => $request->user()->artists()->create([...$request->safe()->except('photo'), 'photo_path' => $path]));
 

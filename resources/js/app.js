@@ -1,4 +1,4 @@
-// Confirmación de borrado (03 §2): se registra antes que el loading para frenar el envío primero.
+// Confirmación de borrado: se registra antes que el loading para frenar el envío primero.
 const confirmDialog = document.getElementById('confirmar');
 let pending = null;
 document.addEventListener('submit', (event) => {
@@ -19,7 +19,7 @@ confirmDialog?.addEventListener('close', () => {
   pending = null;
 });
 
-// Loading de formularios (03 §2): al enviar, el botón principal queda deshabilitado y evita el doble envío.
+// Loading de formularios: al enviar, el botón principal queda deshabilitado y evita el doble envío.
 document.addEventListener('submit', (event) => {
   if (event.defaultPrevented) return;
   const button = event.target.matches('form[data-submit-once]') && event.target.querySelector('button[type="submit"]');
@@ -56,10 +56,10 @@ document.querySelectorAll('input[data-match]').forEach((confirmation) => {
   original.addEventListener('input', () => confirmation.value && check());
 });
 
-// Formulario devuelto con errores: el foco va al primer campo inválido (04 §6).
+// Formulario devuelto con errores: el foco va al primer campo inválido.
 document.querySelector('[aria-invalid="true"]')?.focus();
 
-// Copiar el token recién creado (03 §2). Si el navegador niega el portapapeles, se dice; el texto sigue seleccionable.
+// Copiar el token recién creado. Si el navegador niega el portapapeles, se dice; el texto sigue seleccionable.
 document.querySelectorAll('[data-copy]').forEach((button) => {
   const source = document.getElementById(button.dataset.copy);
   button.hidden = false;

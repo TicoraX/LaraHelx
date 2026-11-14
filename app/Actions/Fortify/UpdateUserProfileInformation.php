@@ -12,7 +12,7 @@ use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
     /**
-     * Valida y guarda nombre, correo y foto (05 §3). El correo ya llega en minúsculas (fortify.lowercase_usernames).
+     * Valida y guarda nombre, correo y foto. El correo ya llega en minúsculas (fortify.lowercase_usernames).
      *
      * @param  array<string, mixed>  $input
      *

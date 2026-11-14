@@ -22,7 +22,7 @@ class TokenController extends Controller
 
         $user = User::where('email', Str::lower($data['email']))->first();
 
-        // Mismo mensaje con correo inexistente o clave mala: no enumera usuarios (05 §5, 25).
+        // Mismo mensaje con correo inexistente o clave mala: no enumera usuarios.
         if (! $user || ! Hash::check($data['password'], $user->password)) {
             throw ValidationException::withMessages(['email' => ['Las credenciales no son válidas']]);
         }

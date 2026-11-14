@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
 /**
- * Segunda línea de I2 (05 §2): el Route::bind con alcance de usuario ya da 404 a lo ajeno.
+ * Segunda línea de defensa: el Route::bind con alcance de usuario ya da 404 a lo ajeno.
  * Esto cubre el caso de que alguien cambie el binding; responde igual, 404.
  */
 class ArtistPolicy

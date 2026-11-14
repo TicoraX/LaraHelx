@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('photo_path')->nullable();
             $table->timestamps();
 
-            // Cubre también las consultas por user_id (columna líder), 05 §1.
+            // Cubre también las consultas por user_id (columna líder).
             $table->unique(['user_id', 'name']);
         });
     }

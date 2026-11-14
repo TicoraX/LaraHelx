@@ -10,10 +10,10 @@ use Illuminate\Validation\Rules\File;
 use RuntimeException;
 use Throwable;
 
-/** Fotos y portadas en el disco público: validación, reemplazo y borrado (05 §3, I7). */
+/** Fotos y portadas en el disco público: validación, reemplazo y borrado. */
 final class Images
 {
-    /** @return array<int, mixed> Reglas de 05 §3: el tipo se decide por el contenido, no por la extensión del cliente. */
+    /** @return array<int, mixed> El tipo se decide por el contenido, no por la extensión del cliente. */
     public static function rules(): array
     {
         return ['nullable', File::image()->types(['jpg', 'jpeg', 'png', 'webp'])->max(2048)
@@ -23,7 +23,7 @@ final class Images
     /**
      * Guarda el archivo nuevo, ejecuta $save con la ruta resultante (la nueva o la vieja) y solo después
      * borra la vieja. Si $save lanza, la imagen vieja queda intacta, la nueva se borra y la excepción
-     * sigue (03 §4). Al crear, $old es null. store() genera el nombre (I7).
+     * sigue. Al crear, $old es null. store() genera el nombre.
      *
      * @template T
      *
@@ -48,7 +48,7 @@ final class Images
 
     /**
      * Miniatura cuadrada como data URI para el PDF: dompdf decodifica la imagen entera y una portada de
-     * 2000 px tarda segundos (F8). Lanza si el archivo no es una imagen legible.
+     * 2000 px tarda segundos. Lanza si el archivo no es una imagen legible.
      */
     public static function thumbnail(string $path, int $size): string
     {

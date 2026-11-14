@@ -1,5 +1,5 @@
 @props(['action', 'name', 'albums' => null, 'person' => true])
-{{-- Con JS, app.js abre el <dialog> de la maestra con estos textos; sin JS, el DELETE se envía directo (03 §2).
+{{-- Con JS, app.js abre el <dialog> de la maestra con estos textos; sin JS, el DELETE se envía directo.
      person: "eliminar a Soda Stereo" (artista) frente a "eliminar Signos" (álbum). --}}
 @php($target = ($person ? 'a ' : '').$name)
 <form method="POST" action="{{ $action }}" data-submit-once

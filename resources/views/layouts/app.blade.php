@@ -47,7 +47,7 @@
         </main>
     </div>
 
-    {{-- Confirmación de borrado (03 §2). Los textos los pone app.js desde data-confirm del formulario. --}}
+    {{-- Confirmación de borrado. Los textos los pone app.js desde data-confirm del formulario. --}}
     <dialog class="dialog" id="confirmar" aria-labelledby="confirmar-t" aria-describedby="confirmar-d">
         <h2 id="confirmar-t"></h2>
         <p id="confirmar-d"></p>

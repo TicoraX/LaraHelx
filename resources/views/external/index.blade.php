@@ -59,7 +59,7 @@
         </section>
     @endif
 
-    {{-- Recuadro técnico (03 §5): muestra la llamada hecha a GoRest, con el token enmascarado. --}}
+    {{-- Recuadro técnico: muestra la llamada hecha a GoRest, con el token enmascarado. --}}
     @if ($call)
         <section class="panel" aria-labelledby="t-llamada">
             <h2 id="t-llamada">Última llamada a GoRest</h2>

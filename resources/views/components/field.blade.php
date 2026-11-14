@@ -29,7 +29,7 @@
             </button>
         </div>
     @endif
-    {{-- El error reemplaza la ayuda en el mismo lugar (04 §6). --}}
+    {{-- El error reemplaza la ayuda en el mismo lugar. --}}
     @if ($error)
         <p class="field__error" id="{{ $id }}-msg">{{ $error }}</p>
     @else

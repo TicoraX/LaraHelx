@@ -19,7 +19,7 @@
             <button class="btn btn--primary btn--block" type="submit">Guardar contraseña</button>
         </form>
 
-        {{-- Si el enlace venció o ya se usó, Fortify devuelve el error en el campo de correo (03 §2). --}}
+        {{-- Si el enlace venció o ya se usó, Fortify devuelve el error en el campo de correo. --}}
         <div class="auth__links">
             <a class="link-action" href="{{ route('password.request') }}">Pedir un enlace nuevo</a>
         </div>

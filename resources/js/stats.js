@@ -2,7 +2,7 @@ import { Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip }
 
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
 
-// Colores de 04 §9; la tabla de datos debajo del canvas sigue visible si este script no carga.
+// Colores del tema; la tabla de datos debajo del canvas sigue visible si este script no carga.
 const css = getComputedStyle(document.documentElement);
 const t = (name) => css.getPropertyValue(name).trim();
 const data = JSON.parse(document.getElementById('stats-data').textContent);

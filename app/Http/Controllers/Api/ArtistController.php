@@ -38,7 +38,7 @@ class ArtistController extends Controller
     public function update(ArtistRequest $request, Artist $artist): ArtistResource
     {
         Gate::authorize('update', $artist);
-        // PUT reemplaza: los opcionales omitidos quedan en null (05 §3).
+        // PUT reemplaza: los opcionales omitidos quedan en null.
         $artist->update(['country' => null, 'bio' => null, ...$request->validated()]);
 
         return new ArtistResource($artist->loadCount('albums'));

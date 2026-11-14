@@ -1,5 +1,5 @@
 @props(['code', 'title', 'hint'])
-{{-- Página de error propia (03 §2, 04 §7): el código en tono secundario, la frase, qué hacer y el camino de vuelta. --}}
+{{-- Página de error propia: el código en tono secundario, la frase, qué hacer y el camino de vuelta. --}}
 <section class="error-page">
     <p class="error-page__code tabular">{{ $code }}</p>
     <h1>{{ $title }}</h1>

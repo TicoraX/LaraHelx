@@ -18,7 +18,7 @@ class Artist extends Model
     protected $fillable = ['name', 'country', 'genre', 'bio', 'photo_path'];
 
     /**
-     * I4: las rutas se juntan antes; el DELETE con su cascada es atómico y los archivos se borran solo
+     * Las rutas se juntan antes; el DELETE con su cascada es atómico y los archivos se borran solo
      * si la fila ya no está. Si el DELETE falla, archivos y fila siguen ahí.
      */
     public function deleteWithImages(): void

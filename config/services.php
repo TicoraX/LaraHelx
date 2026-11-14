@@ -14,7 +14,7 @@ return [
     |
     */
 
-    // GoRest (03 §2): API pública de práctica; el token sale de .env.
+    // GoRest: API pública de práctica; el token sale de .env.
     'gorest' => [
         'url' => 'https://gorest.co.in/public/v2',
         'token' => env('GOREST_TOKEN'),

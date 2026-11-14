@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-/** Alta y edición de usuarios externos en GoRest (05 §3); PUT exige los 4 campos. */
+/** Alta y edición de usuarios externos en GoRest; PUT exige los 4 campos. */
 class ExternalUserRequest extends FormRequest
 {
     public function rules(): array

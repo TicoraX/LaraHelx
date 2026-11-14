@@ -8,7 +8,7 @@ use App\Services\GoRestException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-/** Pantallas de /external/users (03 §2). Ninguna escritura finge éxito: ante un error se vuelve con el mensaje. */
+/** Pantallas de /external/users. Ninguna escritura finge éxito: ante un error se vuelve con el mensaje. */
 class ExternalUserController extends Controller
 {
     public function __construct(private GoRestClient $gorest) {}
