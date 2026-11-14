@@ -162,6 +162,7 @@ return [
         'bio'                      => 'biografía',
         'genre'                    => 'género',
         'token_name'               => 'nombre del token',
+        'device_name'              => 'nombre del dispositivo',
         'address'                  => 'dirección',
         'affiliate_url'            => 'URL de afiliado',
         'age'                      => 'edad',

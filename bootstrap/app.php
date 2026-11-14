@@ -7,6 +7,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -40,6 +41,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (ThrottleRequestsException $e, Request $r) {
             if ($r->is('api/*')) {
                 return response()->json(['message' => 'Demasiados intentos.'], 429, $e->getHeaders());
+            }
+        });
+        $exceptions->render(function (MethodNotAllowedHttpException $e, Request $r) {
+            if ($r->is('api/*')) {
+                return response()->json(['message' => 'Método no permitido'], 405, $e->getHeaders());
             }
         });
     })->create();

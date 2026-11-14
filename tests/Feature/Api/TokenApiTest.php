@@ -25,6 +25,19 @@ class TokenApiTest extends TestCase
         $this->withToken($token)->get('/api/v1/artists')->assertOk();
     }
 
+    public function test_metodo_no_permitido_en_la_api_responde_405_en_espanol(): void
+    {
+        $this->deleteJson('/api/v1/tokens')->assertStatus(405)
+            ->assertExactJson(['message' => 'Método no permitido']);
+    }
+
+    public function test_el_mensaje_de_device_name_vacio_esta_en_espanol(): void
+    {
+        $this->postJson('/api/v1/tokens', [])->assertStatus(422)
+            ->assertJsonValidationErrors('device_name')
+            ->assertJsonPath('errors.device_name.0', fn ($m) => str_contains($m, 'nombre del dispositivo') && ! str_contains($m, 'device name'));
+    }
+
     public function test_acepta_el_correo_con_mayusculas(): void
     {
         User::factory()->create(['email' => 'ana@x.com', 'password' => 'clave-1234']);
