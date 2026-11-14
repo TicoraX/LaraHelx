@@ -61,6 +61,17 @@ class SecurityHeadersTest extends TestCase
             ->assertDontSee('detalle-interno-secreto')->assertDontSee('RuntimeException')->assertDontSee('vendor/');
     }
 
+    public function test_metodo_no_permitido_en_la_web_usa_la_vista_propia_en_espanol(): void
+    {
+        $this->app->detectEnvironment(fn () => 'production');
+        config(['app.debug' => false]);
+
+        $this->delete('/login')->assertStatus(405)
+            ->assertSee('Esta acción no está disponible aquí')
+            ->assertSee('data-layout="guest"', false)
+            ->assertDontSee('Method Not Allowed');
+    }
+
     public function test_con_sesion_el_error_hereda_la_maestra_de_la_app(): void
     {
         $this->app->detectEnvironment(fn () => 'production');
