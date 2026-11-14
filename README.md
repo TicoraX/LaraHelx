@@ -2,7 +2,7 @@
 
 Discoteca es un catálogo personal de música. Cada usuario guarda sus artistas y los álbumes de cada uno, con foto y portada, y puede ver la colección en tablas, en un gráfico por género o en la ficha PDF de un artista. Lo de cada usuario es privado: nadie ve el catálogo de otro.
 
-La hicimos en Laravel 12 para la universidad y está publicada en https://laravel.helx.page.
+Es un proyecto de la universidad hecho en Laravel 12 y está publicado en https://laravel.helx.page.
 
 ## Qué tiene
 
@@ -45,11 +45,3 @@ PHP 8.4, Laravel 12 y PostgreSQL 17. El frontend se compila con Vite y Tailwind 
    ```
    En `.env` faltan dos valores tuyos: `GOREST_TOKEN`, que se saca en gorest.co.in, y `SEED_DEMO_PASSWORD`, la clave de los usuarios de demostración que crea el seeder.
 6. Los tests se corren con `php artisan test` y usan la base `laravel_test` de PostgreSQL.
-
-## Equipo
-
-| Integrante | Parte |
-| :--- | :--- |
-| A | Landing, registro, login, recuperación de contraseña, rutas protegidas, dashboard y perfil |
-| B | CRUD de artistas y álbumes con imágenes, DataTables y PDF |
-| C | Gráfico, API con Sanctum, consumo de GoRest y despliegue |
