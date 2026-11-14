@@ -37,7 +37,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('201 y token', function () { pm.response.to.have.status(201); });",
-              "pm.collectionVariables.set('token', pm.response.json().token);"
+              "if (pm.response.code === 201) { pm.collectionVariables.set('token', pm.response.json().token); }"
             ]
           }
         }
@@ -103,30 +103,6 @@
       }
     },
     {
-      "name": "Ver artista",
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Accept",
-            "value": "application/json"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/artists/{{artistId}}",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "artists",
-            "{{artistId}}"
-          ]
-        }
-      }
-    },
-    {
       "name": "Crear artista",
       "event": [
         {
@@ -134,7 +110,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.collectionVariables.set('artistId', pm.response.json().data.id);"
+              "if (pm.response.code === 201) { pm.collectionVariables.set('artistId', pm.response.json().data.id); }"
             ]
           }
         }
@@ -169,6 +145,30 @@
             "api",
             "v1",
             "artists"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ver artista",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/artists/{{artistId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "artists",
+            "{{artistId}}"
           ]
         }
       }
